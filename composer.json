@@ -13,7 +13,7 @@
   "config": {
     "bin-dir": "bin"
   },
-  "bin": ["bin/mg2-deployer"],
+  "bin": ["bin/mg2-builder"],
   "require": {
     "phing/phing": "2.*",
     "n98/magerun2": "*"

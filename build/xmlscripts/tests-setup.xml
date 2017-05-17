@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * install.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="tests-setup" basedir="." default="...">
+
+    <target name="test-setup:integration"
+            depends="tests-setup:properties,
+            tests-setup:integration:template,
+            tests-setup:integration:db"
+            hidden="true"
+            unless="skipIntegration">
+
+        <customHook hook="after-tests-setup-integration"/>
+
+        <echo message="Integration-tests setup done"/>
+
+    </target>
+
+    <target name="tests-setup:properties"
+            hidden="true">
+
+        <property name="test.integration.db.host" value="${database.host}"/>
+        <property name="test.integration.db.name" value="${database.name}_integration_tests"/>
+        <property name="test.integration.db.user" value="${database.user}"/>
+        <property name="test.integration.db.password" value="${database.password}"/>
+    </target>
+
+    <target name="tests-setup:integration:template"
+            hidden="true">
+
+        <copy file="${template.integration.mysql}"
+              tofile="${magento.dir}/dev/tests/integration/etc/install-config-mysql.php"
+              overwrite="true"
+              verbose="true">
+            <filterchain>
+                <replacetokens begintoken="{{" endtoken="}}">
+                    <token key="INTEGRATION_DB_HOST" value="${test.integration.db.host}"/>
+                    <token key="INTEGRATION_DB_NAME" value="${test.integration.db.name}"/>
+                    <token key="INTEGRATION_DB_USER" value="${test.integration.db.user}"/>
+                    <token key="INTEGRATION_DB_PASS" value="${test.integration.db.password}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+    </target>
+
+    <target name="tests-setup:integration:db"
+            hidden="true">
+
+        <exec command="${database.connection.command} -e '
+        DROP DATABASE IF EXISTS `${test.integration.db.name}`;
+        CREATE DATABASE `${test.integration.db.name}`;
+        GRANT ALL ON `${test.integration.db.name}`.* TO `${test.integration.db.user}`@`${test.integration.db.host}` IDENTIFIED BY &quot;${test.integration.db.password}&quot;;'"
+              checkreturn="true"
+              logoutput="true"/>
+
+    </target>
+
+</project>

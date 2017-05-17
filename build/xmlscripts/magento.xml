@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * magento.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Magento" basedir="..." >
+
+    <includepath classpath="${phing.dir}/build/phpscripts/Magento"/>
+    <taskdef name="setMagentoConfig" classname="EnsureConfiguration"/>
+
+    <target name="magento:clean:setup"
+            depends="magento:install,
+            magento:config:set,
+            magento:cache:clean"
+            hidden="true">
+
+        <echo message="****************************************************************************"/>
+        <echo message="Magento has been successfully set up"/>
+        <echo message=""/>
+        <echo message="Admin frontname: /${magento.admin.frontname}"/>
+        <echo message="Admin username: ${install.admin.username}"/>
+        <echo message="Admin password: ${install.admin.password}"/>
+        <echo message="****************************************************************************"/>
+
+    </target>
+
+    <target name="magento:install"
+            description="Install plain Magento instance in database"
+            depends="database:drop,
+            database:create"
+            hidden="true">
+
+        <customHook hook="before-magento-install"/>
+
+        <echo message="Installing Magento..."/>
+
+        <exec passthru="false"
+              checkreturn="true"
+              logoutput="true"
+              command="${bin.magento} setup:install
+                --backend-frontname=&quot;${magento.admin.frontname}&quot;
+                --db-host=&quot;${database.host}&quot;
+                --db-name=&quot;${database.name}&quot;
+                --db-user=&quot;${database.user}&quot;
+                --db-password=&quot;${database.password}&quot;
+                --base-url=&quot;http://${project.name}.lo&quot;
+                --language=&quot;${install.locale}&quot;
+                --timezone=&quot;${install.timezone}&quot;
+                --currency=&quot;${install.currency}&quot;
+                --admin-firstname=&quot;${install.admin.firstname}&quot;
+                --admin-lastname=&quot;${install.admin.lastname}&quot;
+                --admin-email=&quot;${install.admin.email}&quot;
+                --admin-user=&quot;${install.admin.username}&quot;
+                --admin-password=&quot;${install.admin.password}&quot;
+                --use-rewrites=1
+                --cleanup-database
+                ${magento.setup.install.extra.params}
+               "/>
+
+        <customHook hook="after-magento-install"/>
+
+    </target>
+
+    <target name="magento:config:set"
+            description="Set Magento core config settings"
+            hidden="true">
+
+        <setMagentoConfig/>
+
+    </target>
+
+    <target name="magento:setup:upgrade"
+            description="Run all sql scripts to update the modules version"
+            hidden="true">
+
+        <property name="command.setup.upgrade" value="${bin.magento} setup:upgrade" />
+        <echo message="running ${command.setup.upgrade}"/>
+        <exec command="${command.setup.upgrade}" checkreturn="true" logoutput="true" />
+    </target>
+
+    <target name="magento:cache:clean"
+            description="Clear magento cache"
+            hidden="true">
+
+        <property name="command.cache.clean" value="${bin.magento} cache:clean"/>
+        <echo message="running ${command.cache.clean}"/>
+        <exec command="${command.cache.clean}" returnProperty="clean.cache.return" outputProperty="command.cache.clean.output"/>
+
+        <if>
+            <not>
+                <equals arg1="${clean.cache.return}" arg2="0"/>
+            </not>
+            <then>
+                <property name="command.cache.remove" value="rm -rf ${magento.dir}/var/cache/* ${magento.dir}/var/di/* ${magento.dir}/var/generation/* ${magento.dir}/var/page_cache/*"  />
+                <echo message="try removing folder directly"/>
+                <echo message="running ${command.cache.remove}"/>
+                <exec command="${command.cache.remove}" logoutput="true"/>
+            </then>
+            <else>
+                <echo message="${command.cache.clean.output}"/>
+            </else>
+        </if>
+
+    </target>
+
+</project>

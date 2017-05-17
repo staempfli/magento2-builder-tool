@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * sync.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Sync" basedir="." default="...">
+
+    <target name="sync"
+            description="Sync DB and Media form remote server"
+            depends="util:properties,
+            util:environment,
+            server:properties,
+            sync:db,
+            sync:media">
+
+        <customHook hook="after-sync"/>
+
+        <echo message="Sync all from ${server.ssh.host} finish successfully"/>
+
+    </target>
+
+    <target name="sync:db"
+            description="Create Remote Database Dump and Import"
+            depends="sync:db:dump,
+            sync:db:download,
+            database:import"
+            hidden="true">
+
+        <property name="sync.dump.local.remove" value="rm ${dump.local.absolutePath}" override="true"/>
+        <echo message="Remove dump imported on current machine"/>
+        <echo message="${sync.dump.local.remove}"/>
+        <exec command="${sync.dump.local.remove}" checkreturn="true" logoutput="true"/>
+
+        <property name="sync.dump.remote.remove" value="rm ${sync.dump.remote.absolutePath}" override="true"/>
+        <echo message="Remove remote dump created"/>
+        <echo message="${server.ssh.host} => ${sync.dump.remote.remove}"/>
+        <exec command="ssh -p ${server.ssh.port} ${server.ssh.username}@${server.ssh.host} &quot; ${sync.dump.remote.remove} &quot;"
+              logoutput="true"
+              checkreturn="true"/>
+
+    </target>
+
+    <target name="sync:db:dump"
+            description="Create Remote Mysql dump on specific server"
+            hidden="true">
+
+        <property name="sync.dump.filename"
+                  value="${project.name}_${remote.environment}_${database.connection.type}_${build.timestamp}.sql.gz"
+                  override="true"/>
+        <property name="sync.dump.remote.absolutePath" value="/tmp/${sync.dump.filename}" override="true"/>
+        <property name="command.remote.createDump"
+                  value="cd ${server.ssh.rootDir} &amp;&amp; ${bin.magerun98} db:dump --skip-core-commands --connection=${database.connection.type} --compression='gzip' --strip='${sync.dump.strips}' ${sync.dump.remote.absolutePath}"
+                  override="true"/>
+
+        <echo message="${command.remote.createDump}"/>
+        <exec command="ssh -p ${server.ssh.port} ${server.ssh.username}@${server.ssh.host} &quot; ${command.remote.createDump} &quot;"
+              logoutput="true"
+              checkreturn="true"/>
+
+    </target>
+
+    <target name="sync:db:download"
+            description="Get Remote Mysql dump on specific server"
+            hidden="true">
+
+        <property name="sync.local.dumpDir" value="/tmp"/>
+        <exec command="scp -P ${server.ssh.port} ${server.ssh.username}@${server.ssh.host}:${sync.dump.remote.absolutePath} ${sync.local.dumpDir}/"
+              logoutput="true"
+              checkreturn="true"/>
+        <property name="dump.local.absolutePath" value="${sync.local.dumpDir}/${sync.dump.filename}" override="true"/>
+        <echo message="Database dump saved at ${dump.local.absolutePath}"/>
+
+    </target>
+
+    <target name="sync:media"
+            description="Sync Media data from specific server"
+            hidden="true"
+            unless="skipSyncMedia">
+
+        <property name="sync.media.source"
+                  value="${server.ssh.username}@${server.ssh.host}:${server.ssh.rootDir}/${sync.media.dir}/"
+                  override="true"/>
+        <property name="sync.media.dest" value="${sync.media.dir}" override="true"/>
+
+        <if>
+            <not>
+                <available property="sync.dir.dest.exists" file="${sync.media.dir}" type="dir"/>
+            </not>
+            <then>
+                <mkdir dir="${sync.media.dest}"/>
+                <echo message="Created destination dir ${sync.media.dest}"/>
+            </then>
+        </if>
+
+        <property name="sync.media.command"
+                  value='rsync -a -e &quot;ssh -p ${server.ssh.port}&quot; --stats ${sync.media.source} ${sync.media.dest} ${sync.media.excludes}'
+                  override="true"/>
+        <echo message="${sync.media.command}"/>
+        <exec command="${sync.media.command}"
+              checkreturn="false"
+              logoutput="true"/>
+
+    </target>
+
+</project>

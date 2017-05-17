@@ -1,0 +1,23 @@
+server {
+    listen 80;
+    server_name {{SERVER_NAME}}.lo;
+
+    # document root
+    root {{DOCUMENT_ROOT}};
+
+    # access and error logging
+    access_log {{LOGS_DIR}}/access.log;
+    error_log {{LOGS_DIR}}/error.log;
+
+    # Set default website
+    set $websiteCode base;
+    set $websiteType website;
+
+    include {{USER_HOME}}/etc/nginx/include/magento.conf;
+    # Add the following inside your gpm configuration
+    #    location ~ \.php$ {
+    #        #...
+    #        fastcgi_param MAGE_RUN_CODE $websiteCode;
+    #        fastcgi_param MAGE_RUN_TYPE $websiteType;
+    #    }
+}

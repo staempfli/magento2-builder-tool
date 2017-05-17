@@ -1,0 +1,10 @@
+.idea
+.DS_STORE
+/vendor
+/bin
+/magento
+servers-config.yaml
+config.yaml
+env.php.template
+apache.local.conf
+nginx.local.conf

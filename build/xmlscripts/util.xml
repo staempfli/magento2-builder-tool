@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * util.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Util" basedir="../..">
+
+    <target name="util:properties"
+            description="read all required properties files"
+            hidden="true">
+
+        <!-- get the project name automatically as the project root directory -->
+        <exec command="basename ${phing.dir}" outputProperty="project.name"/>
+
+        <property file="${phing.dir}/../_conf/environment.properties"/>
+        <property file="${phing.dir}/config/project.properties"/>
+        <property file="${phing.dir}/build/configuration/default.properties"/>
+
+        <customHook hook="after-read-properties"/>
+    </target>
+
+    <target name="util:environment"
+            description="get the current environment"
+            hidden="true">
+
+        <if>
+            <isset property="project.environment"/>
+            <then>
+                <echo message="Environment already set to ${project.environment}"/>
+            </then>
+            <else>
+                <input propertyName="project.environment" validArgs="local,igr"
+                       message="Please specify the Project environment: "/>
+            </else>
+        </if>
+    </target>
+
+</project>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * database.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Database" basedir="." default="...">
+
+    <target name="database:properties"
+            description="Get Database Properties"
+            hidden="true">
+
+        <passwordGenerator outputPropertyName="database.password"/>
+
+        <property name="database.user" value="${project.name}"/>
+        <property name="database.name" value="${project.name}"/>
+
+        <if>
+            <not>
+                <isset property="database.admin.username"/>
+            </not>
+            <then>
+                <input propertyName="database.admin.username"
+                       message="Database Admin Username: "/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <isset property="database.admin.password"/>
+            </not>
+            <then>
+                <echo message="${database.admin.username}'s password:"/>
+                <exec command="build/shellscripts/inputpassword.sh" outputProperty="database.admin.password"/>
+            </then>
+        </if>
+
+        <property name="database.connection.command" value="mysql -h${database.host} -u${database.admin.username}"/>
+        <if>
+            <not>
+                <equals arg1="${database.admin.password}" arg2=""/>
+            </not>
+            <then>
+                <property name="database.connection.command" value="${database.connection.command} -p${database.admin.password}" override="true"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="database:user:create"
+            description="Setup Database user and grant privileges"
+            hidden="true">
+
+        <exec command="${database.connection.command} -e '
+        DROP USER IF EXISTS `${database.user}`@`${database.host}`;
+        CREATE USER IF NOT EXISTS `${database.user}`@`${database.host}` IDENTIFIED BY &quot;${database.password}&quot;;
+        GRANT ALL ON *.* TO `${database.user}`@`${database.host}`;'"
+              checkreturn="true"
+              logoutput="true"/>
+
+    </target>
+
+    <target name="database:create"
+            description="Create Clean Magento Database"
+            hidden="true">
+
+        <property name="command.create.database"
+                  value="${bin.magerun98} db:create --connection=${database.connection.type}"
+                  override="true"/>
+        <echo message="${command.create.database}"/>
+        <exec command="${command.create.database}" checkreturn="true" logoutput="true"/>
+
+    </target>
+
+    <target name="database:drop"
+            description="drops magento database"
+            hidden="true">
+
+        <property name="command.drop.database"
+                  value="${bin.magerun98} db:drop -f --connection=${database.connection.type}"
+                  override="true"/>
+        <echo message="${command.drop.database}"/>
+        <exec command="${command.drop.database}" checkreturn="false" logoutput="true"/>
+
+    </target>
+
+    <target name="database:import"
+            description="Import mysql dump from specific location"
+            depends="database:drop,
+            database:create"
+            hidden="true">
+
+        <if>
+            <not>
+                <and>
+                    <isset property="dump.local.absolutePath"/>
+                    <istrue value="${dump.local.absolutePath}"/>
+                </and>
+            </not>
+            <then>
+                <input message="Please specify the dump filename" propertyName="dump.local.absolutePath"/>
+            </then>
+        </if>
+
+        <exec command="echo ${dump.local.absolutePath} | awk -F . '{print $NF}'" outputProperty="dump.filename.extension"/>
+        <if>
+            <equals arg1="${dump.filename.extension}" arg2="gz"/>
+            <then>
+                <property name="compression.param" value='--compression="gzip"' override="true"/>
+            </then>
+            <else>
+                <property name="compression.param" value="" override="true"/>
+            </else>
+        </if>
+
+        <property name="command.import.dump"
+                  value="${bin.magerun98} db:import --connection=${database.connection.type} ${compression.param} ${dump.local.absolutePath}"
+                  override="true"/>
+        <echo message="${command.import.dump}"/>
+        <exec command="${command.import.dump}"
+              checkreturn="true"
+              logoutput="true"/>
+
+        <if>
+            <equals arg1="${database.connection.type}" arg2="default"/>
+            <then>
+                <phingcall target="magento:setup:upgrade"/>
+                <phingcall target="magento:config:set"/>
+                <phingcall target="magento:cache:clean"/>
+            </then>
+        </if>
+
+    </target>
+
+</project>

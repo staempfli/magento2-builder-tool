@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+    DocumentRoot "{{DOCUMENT_ROOT}}"
+    ServerName {{SERVER_NAME}}.lo
+    <Directory {{DOCUMENT_ROOT}}>
+	Options Indexes FollowSymLinks MultiViews
+	AllowOverride All
+	Order allow,deny
+	Allow from all
+	Require all granted
+    </Directory>
+    ErrorLog "{{LOGS_DIR}}/error_log"
+    CustomLog "{{LOGS_DIR}}/access_log" common
+</VirtualHost>

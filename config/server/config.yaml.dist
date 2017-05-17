@@ -1,0 +1,15 @@
+DEV:
+  host: example.server.host
+  port: 22
+  rootDir: /home/<project_name>/public_html
+
+IGR:
+  host: example.server.host
+  port: 22
+  rootDir: /home/<project_name>/public_html
+
+PRD:
+  host: example.server.host
+  port: 22
+  rootDir: /home/<project_name>/public_html
+

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * install.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Install" basedir="." default="...">
+
+    <target name="install"
+            description="Setup clean project from scratch"
+            depends="util:properties,
+            util:environment,
+            install:allowed,
+            database:properties,
+            database:user:create,
+            install:type:set,
+            install:config:env,
+            install:initialize,
+            install:vhost,
+            test-setup:integration">
+
+        <echo message="****************************************************************************"/>
+        <echo message="Installation Successful"/>
+        <echo message="You can start working!"/>
+        <echo message="****************************************************************************"/>
+
+    </target>
+
+    <target name="install:allowed"
+            description="Check whether install action ca be executed on this server"
+            hidden="true">
+
+        <if>
+            <equals arg1="${project.environment}" arg2="local"/>
+            <then>
+                <echo message="&quot;${project.environment}&quot; is a valid environment for executing this action"/>
+            </then>
+            <else>
+                <fail message="Environment &quot;${project.environment}&quot; is NOT valid environment for executing this action. This action can be executed only on Local environments"/>
+            </else>
+        </if>
+
+    </target>
+
+    <target name="install:type:set"
+            description="Define installation Type"
+            depends="server:configurations:load"
+            hidden="true">
+
+        <if>
+            <and>
+                <isset property="servers.available"/>
+                <not>
+                    <isset property="install.type"/>
+                </not>
+            </and>
+            <then>
+                <input propertyName="install.type"
+                       validArgs="clean,sync"
+                       message="Type of installation? "
+                       defaultValue="sync"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="install:config:env"
+            description="Replace env.php configuration with an specific template"
+            hidden="true">
+        <passwordGenerator outputPropertyName="encryption.key" passwordLength="32"/>
+        <if>
+            <equals arg1="${install.type}" arg2="clean"/>
+            <then>
+                <!-- IMPORTANT:
+                    For clean installations we cannot set the install date configuration.
+                    Otherwise the install command might crash
+                -->
+                <property name="env.install.date.config" value="" override="true"/>
+            </then>
+        </if>
+
+        <copy file="${template.envphp}"
+              tofile="${magento.dir}/app/etc/env.php"
+              overwrite="true"
+              verbose="true">
+            <filterchain>
+                <replacetokens begintoken="{{" endtoken="}}">
+                    <token key="ENCRYPTION_KEY" value="${encryption.key}" />
+                    <token key="DATABASE_HOST" value="${database.host}" />
+                    <token key="DATABASE_USER" value="${database.user}" />
+                    <token key="DATABASE_PASS" value="${database.password}" />
+                    <token key="DATABASE_NAME" value="${database.name}" />
+                    <token key="ADMIN_FRONTNAME" value="${magento.admin.frontname}" />
+                    <token key="INSTALL_DATE" value="${env.install.date.config}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+
+    <target name="install:initialize"
+            description="Initialize Magento instance"
+            depends="magento:cache:clean"
+            hidden="true" >
+        <if>
+            <equals arg1="${install.type}" arg2="sync"/>
+            <then>
+                <executeTarget target="sync"/>
+            </then>
+            <else>
+                <executeTarget target="magento:clean:setup"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="install:vhost"
+            description="Set vhost configuration on specific directory"
+            hidden="true"
+            unless="skipVhosts">
+
+        <if>
+            <not>
+                <isset property="environment.server.type"/>
+            </not>
+            <then>
+                <input propertyName="environment.server.type"
+                       validArgs="apache,nginx,none"
+                       defaultValue="none"
+                       message="Vhosts configuration? "/>
+            </then>
+        </if>
+        <if>
+            <equals arg1="${environment.server.type}" arg2="none"/>
+            <then>
+                <echo message="vhost config SKIPPED"/>
+            </then>
+            <else>
+                <if>
+                    <not>
+                        <isset property="environment.vhost.dir"/>
+                    </not>
+                    <then>
+                        <input propertyName="environment.vhost.dir"
+                               defaultValue="/var/www/_conf"
+                               message="Please set your absolute path to vhost.d: "/>
+                    </then>
+                </if>
+
+                <property name="vhost.local.template" value="${template.${environment.server.type}.local}"/>
+
+                <copy file="${vhost.local.template}"
+                      tofile="${environment.vhost.dir}/${project.name}.conf"
+                      overwrite="true"
+                      verbose="true">
+                    <filterchain>
+                        <replacetokens begintoken="{{" endtoken="}}">
+                            <token key="DOCUMENT_ROOT" value="${phing.dir}/${magento.dir}" />
+                            <token key="SERVER_NAME" value="${project.name}" />
+                            <token key="LOGS_DIR" value="${phing.dir}/${logs.dir}" />
+                            <token key="USER_HOME" value="${user.home}" />
+                        </replacetokens>
+                    </filterchain>
+                </copy>
+            </else>
+        </if>
+
+    </target>
+
+</project>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * server.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Server" basedir="." default="...">
+
+    <includepath classpath="${phing.dir}/build/phpscripts/Server"/>
+    <taskdef name="setServerProperties" classname="SetServerProperties"/>
+    <taskdef name="setAvailableServers" classname="setAvailableServers"/>
+
+    <target name="server:configurations:load"
+            description="load servers configuration"
+            hidden="true">
+
+        <setAvailableServers/>
+
+    </target>
+
+    <target name="server:properties"
+            description="Get server properties from yaml file"
+            depends="server:configurations:load"
+            hidden="true">
+
+        <if>
+            <not>
+                <isset property="servers.available"/>
+            </not>
+            <then>
+                <fail message="No servers defined for sync options"/>
+            </then>
+        </if>
+        <if>
+            <isset property="remote.environment"/>
+            <then>
+                <echo message="Remote Environment already set to ${remote.environment}"/>
+            </then>
+            <else>
+                <input propertyName="remote.environment" validArgs="${servers.available}"
+                       message="Please specify the Remote environment to get the data from: "/>
+            </else>
+        </if>
+
+        <setServerProperties/>
+
+        <if>
+            <not>
+                <isset property="server.ssh.username"/>
+            </not>
+            <then>
+                <input propertyName="server.ssh.username"
+                       message="${server.ssh.host}'s username: "/>
+            </then>
+        </if>
+    </target>
+
+</project>

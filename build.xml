@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Project" default="help">
+
+    <!-- Import all files used in dev tool -->
+    <import file="build/xmlscripts/database.xml"/>
+    <import file="build/xmlscripts/install.xml"/>
+    <import file="build/xmlscripts/magento.xml"/>
+    <import file="build/xmlscripts/release.xml"/>
+    <import file="build/xmlscripts/server.xml"/>
+    <import file="build/xmlscripts/sync.xml"/>
+    <import file="build/xmlscripts/tests-setup.xml"/>
+    <import file="build/xmlscripts/util.xml"/>
+
+    <!-- Project specific custom scripts for executing possible hooks -->
+    <import file="scripts/phing/custom.xml" optional="true"/>
+
+    <includepath classpath="${phing.dir}/build/phpscripts/Util"/>
+    <taskdef name="executeTarget" classname="ExecuteTargetTask"/>
+    <taskdef name="customHook" classname="CustomHookTask"/>
+    <taskdef name="passwordGenerator" classname="PasswordTask"/>
+
+    <tstamp>
+        <format property="build.timestamp" pattern="%Y%m%d-%H%M"/>
+    </tstamp>
+
+    <target name="help"
+            description="show help">
+        <echo message="****************************************************************************"/>
+        <echo message="Magento 2 Deployment Tool - Welcome"/>
+        <echo message="****************************************************************************"/>
+        <echo message="Issue phing -l to see a list of available targets."/>
+        <echo message=""/>
+        <echo message="Common workflow is:"/>
+        <echo message=""/>
+        <echo message="1. bin/phing install"/>
+        <echo message="2. work on project"/>
+    </target>
+
+</project>

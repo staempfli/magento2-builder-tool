@@ -11,46 +11,11 @@
     }
   ],
   "config": {
-    "secure-http": false,
-    "bin-dir": "bin",
-    "vendor-dir": "magento/vendor",
-    "use-include-path": true
+    "bin-dir": "bin"
   },
-  "repositories": [
-    {"type": "composer", "url": "https://repo.magento.com/"},
-    {"type": "composer", "url": "https://packages.staempfli.com/"}
-  ],
+  "bin": ["bin/mg2-deployer"],
   "require": {
     "phing/phing": "2.*",
-    "n98/magerun2": "*",
-    "magento/product-community-edition": "*",
-    "composer/composer": "@alpha"
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Magento\\Setup\\": "magento/setup/src/Magento/Setup/"
-    },
-    "files": [
-      "magento/app/etc/NonComposerComponentRegistration.php"
-    ]
-  },
-  "extra": {
-    "magento-root-dir": "magento/",
-    "magento-force": "override"
-  },
-  "scripts": {
-    "setPermissionsBin": "chmod -R +x bin magento/bin",
-    "symlinkComposerFilesToMagentoRoot": "cd magento && ln -sf ../composer.* .",
-    "replaceMagentoFilesWithCustom": "cd symlinks && find . -type f -exec ln -sf `pwd`/{} ../{} \\;",
-    "post-install-cmd": [
-      "@setPermissionsBin",
-      "@symlinkComposerFilesToMagentoRoot",
-      "@replaceMagentoFilesWithCustom"
-    ],
-    "post-update-cmd": [
-      "@setPermissionsBin",
-      "@symlinkComposerFilesToMagentoRoot",
-      "@replaceMagentoFilesWithCustom"
-    ]
+    "n98/magerun2": "*"
   }
 }

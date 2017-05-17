@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Install" basedir="." default="...">
+<project name="Install">
 
     <target name="install"
             description="Setup clean project from scratch"

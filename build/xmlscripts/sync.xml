@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Sync" basedir="." default="...">
+<project name="Sync">
 
     <target name="sync"
             description="Sync DB and Media form remote server"

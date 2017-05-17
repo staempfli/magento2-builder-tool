@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="tests-setup" basedir="." default="...">
+<project name="tests-setup">
 
     <target name="test-setup:integration"
             depends="tests-setup:properties,

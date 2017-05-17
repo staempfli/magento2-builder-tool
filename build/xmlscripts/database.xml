@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Database" basedir="." default="...">
+<project name="Database">
 
     <target name="database:properties"
             description="Get Database Properties"

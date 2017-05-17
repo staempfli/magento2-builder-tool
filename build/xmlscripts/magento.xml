@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Magento" basedir="..." >
+<project name="Magento">
 
     <includepath classpath="${phing.dir}/build/phpscripts/Magento"/>
     <taskdef name="setMagentoConfig" classname="EnsureConfiguration"/>

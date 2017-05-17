@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Util" basedir="../..">
+<project name="Util">
 
     <target name="util:properties"
             description="read all required properties files"

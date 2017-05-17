@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Server" basedir="." default="...">
+<project name="Server">
 
     <includepath classpath="${phing.dir}/build/phpscripts/Server"/>
     <taskdef name="setServerProperties" classname="SetServerProperties"/>

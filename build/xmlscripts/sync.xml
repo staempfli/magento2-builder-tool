@@ -53,7 +53,7 @@
                   override="true"/>
         <property name="sync.dump.remote.absolutePath" value="/tmp/${sync.dump.filename}" override="true"/>
         <property name="command.remote.createDump"
-                  value="cd ${server.ssh.rootDir} &amp;&amp; bin/${bin.n98-magerun2} db:dump --skip-core-commands --connection=${database.connection.type} --compression='gzip' --strip='${sync.dump.strips}' ${sync.dump.remote.absolutePath}"
+                  value="cd ${server.ssh.rootDir} &amp;&amp; ${sync.bin.n98-magerun2} db:dump --skip-core-commands --connection=${database.connection.type} --compression='gzip' --strip='${sync.dump.strips}' ${sync.dump.remote.absolutePath}"
                   override="true"/>
 
         <echo message="${command.remote.createDump}"/>

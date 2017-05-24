@@ -118,7 +118,8 @@
     <target name="install:vhost"
             description="Set vhost configuration on specific directory"
             hidden="true"
-            unless="skipVhosts">
+            unless="skipVhosts"
+            logskipped="true">
 
         <if>
             <not>

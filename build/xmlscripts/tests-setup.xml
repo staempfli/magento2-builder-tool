@@ -15,7 +15,8 @@
             tests-setup:integration:db:drop,
             tests-setup:integration:db:create"
             hidden="true"
-            unless="skipIntegration">
+            unless="skipIntegration"
+            logskipped="true">
 
         <customHook hook="after-tests-setup-integration"/>
 

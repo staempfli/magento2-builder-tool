@@ -79,7 +79,8 @@
     <target name="sync:media"
             description="Sync Media data from specific server"
             hidden="true"
-            unless="skipSyncMedia">
+            unless="skipSyncMedia"
+            logskipped="true">
 
         <property name="sync.media.source"
                   value="${server.ssh.username}@${server.ssh.host}:${server.ssh.rootDir}/${sync.media.dir}/"

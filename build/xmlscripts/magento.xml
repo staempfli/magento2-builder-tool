@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Magento">
+<project name="Magento" default="..." basedir=".">
 
     <includepath classpath="${phing.dir}/build/phpscripts/Magento"/>
     <taskdef name="setMagentoConfig" classname="EnsureConfiguration"/>
@@ -41,7 +41,7 @@
         <exec passthru="false"
               checkreturn="true"
               logoutput="true"
-              command="${bin.magento} setup:install
+              command="${bin.n98-magerun2} setup:install
                 --backend-frontname=&quot;${magento.admin.frontname}&quot;
                 --db-host=&quot;${database.host}&quot;
                 --db-name=&quot;${database.name}&quot;
@@ -77,7 +77,7 @@
             description="Run all sql scripts to update the modules version"
             hidden="true">
 
-        <property name="command.setup.upgrade" value="${bin.magento} setup:upgrade" />
+        <property name="command.setup.upgrade" value="${bin.n98-magerun2} setup:upgrade" />
         <echo message="running ${command.setup.upgrade}"/>
         <exec command="${command.setup.upgrade}" checkreturn="true" logoutput="true" />
     </target>
@@ -86,7 +86,7 @@
             description="Clear magento cache"
             hidden="true">
 
-        <property name="command.cache.clean" value="${bin.magento} cache:clean"/>
+        <property name="command.cache.clean" value="${bin.n98-magerun2} cache:clean"/>
         <echo message="running ${command.cache.clean}"/>
         <exec command="${command.cache.clean}" returnProperty="clean.cache.return" outputProperty="command.cache.clean.output"/>
 

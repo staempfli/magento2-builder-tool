@@ -7,12 +7,13 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="tests-setup">
+<project name="tests-setup" default="..." basedir=".">
 
     <target name="test-setup:integration"
             depends="tests-setup:properties,
             tests-setup:integration:template,
-            tests-setup:integration:db"
+            tests-setup:integration:db:drop,
+            tests-setup:integration:db:create"
             hidden="true"
             unless="skipIntegration">
 
@@ -50,13 +51,22 @@
 
     </target>
 
-    <target name="tests-setup:integration:db"
+    <target name="tests-setup:integration:db:create"
             hidden="true">
 
         <exec command="${database.connection.command} -e '
-        DROP DATABASE IF EXISTS `${test.integration.db.name}`;
         CREATE DATABASE `${test.integration.db.name}`;
         GRANT ALL ON `${test.integration.db.name}`.* TO `${test.integration.db.user}`@`${test.integration.db.host}` IDENTIFIED BY &quot;${test.integration.db.password}&quot;;'"
+              checkreturn="true"
+              logoutput="true"/>
+
+    </target>
+
+    <target name="tests-setup:integration:db:drop"
+            hidden="true">
+
+        <exec command="${database.connection.command} -e '
+        DROP DATABASE IF EXISTS `${test.integration.db.name}`;'"
               checkreturn="true"
               logoutput="true"/>
 

@@ -43,13 +43,13 @@ class EnsureConfiguration extends Task
      */
     private function _setConfigValues(array $config)
     {
-        $magenrunBin = $this->getProject()->getProperty('bin.magerun98');
+        $magerunBin = $this->getProject()->getProperty('bin.n98-magerun2');
         foreach ($config as $path => $pathData) {
             foreach ($pathData as $scope => $scopeData) {
                 foreach ($scopeData as $scopeId => $value) {
                     $value = $this->getProject()->replaceProperties($value);
                     $command = sprintf('%s config:set --scope="%s" --scope-id="%s" %s %s',
-                        $magenrunBin, $scope, $scopeId, $path, $value);
+                        $magerunBin, $scope, $scopeId, $path, $value);
                     exec($command, $output, $return);
                     if ($return) {
                         $message = sprintf('Error executing command: %s', $command);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Magento2 Builder Tool" default="help">
+<project name="Magento2 Builder Tool" default="help" basedir=".">
 
     <!-- Import all files used in dev tool -->
     <import file="${phing.dir}/build/xmlscripts/database.xml"/>

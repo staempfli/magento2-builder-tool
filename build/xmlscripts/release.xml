@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Release">
+<project name="Release" default="..." basedir=".">
 
     <target name="release:finish"
             description="Finishes release/hotfix and pushes corresponding branches and tags">

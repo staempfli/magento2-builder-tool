@@ -7,17 +7,23 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Database">
+<project name="Database" default="..." basedir=".">
 
     <target name="database:properties"
             description="Get Database Properties"
             hidden="true">
 
-        <passwordGenerator outputPropertyName="database.password"/>
-
         <property name="database.user" value="${project.name}"/>
         <property name="database.name" value="${project.name}"/>
 
+        <if>
+            <not>
+                <isset property="database.password"/>
+            </not>
+            <then>
+                <passwordGenerator outputPropertyName="database.password"/>
+            </then>
+        </if>
         <if>
             <not>
                 <isset property="database.admin.username"/>
@@ -33,7 +39,7 @@
             </not>
             <then>
                 <echo message="${database.admin.username}'s password:"/>
-                <exec command="build/shellscripts/inputpassword.sh" outputProperty="database.admin.password"/>
+                <exec command="${phing.dir}/build/shellscripts/inputpassword.sh" outputProperty="database.admin.password"/>
             </then>
         </if>
 
@@ -50,7 +56,8 @@
 
     <target name="database:user:create"
             description="Setup Database user and grant privileges"
-            hidden="true">
+            hidden="true"
+            unless="skipDbUserCreation">
 
         <exec command="${database.connection.command} -e '
         DROP USER IF EXISTS `${database.user}`@`${database.host}`;
@@ -66,7 +73,7 @@
             hidden="true">
 
         <property name="command.create.database"
-                  value="${bin.magerun98} db:create --connection=${database.connection.type}"
+                  value="${bin.n98-magerun2} db:create --connection=${database.connection.type}"
                   override="true"/>
         <echo message="${command.create.database}"/>
         <exec command="${command.create.database}" checkreturn="true" logoutput="true"/>
@@ -78,7 +85,7 @@
             hidden="true">
 
         <property name="command.drop.database"
-                  value="${bin.magerun98} db:drop -f --connection=${database.connection.type}"
+                  value="${bin.n98-magerun2} db:drop -f --connection=${database.connection.type}"
                   override="true"/>
         <echo message="${command.drop.database}"/>
         <exec command="${command.drop.database}" checkreturn="false" logoutput="true"/>
@@ -115,7 +122,7 @@
         </if>
 
         <property name="command.import.dump"
-                  value="${bin.magerun98} db:import --connection=${database.connection.type} ${compression.param} ${dump.local.absolutePath}"
+                  value="${bin.n98-magerun2} db:import --connection=${database.connection.type} ${compression.param} ${dump.local.absolutePath}"
                   override="true"/>
         <echo message="${command.import.dump}"/>
         <exec command="${command.import.dump}"

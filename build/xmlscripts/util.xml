@@ -7,24 +7,22 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="Util">
+<project name="Util" default="..." basedir=".">
 
     <target name="util:properties"
-            description="read all required properties files"
             hidden="true">
 
         <!-- get the project name automatically as the project root directory -->
-        <exec command="basename ${phing.dir}" outputProperty="project.name"/>
+        <exec command="basename ${application.startdir}" outputProperty="project.name"/>
 
-        <property file="${phing.dir}/../_conf/environment.properties"/>
-        <property file="${phing.dir}/config/project.properties"/>
+        <property file="${application.startdir}/../_conf/environment.properties"/>
+        <property file="${application.startdir}/config/project.properties"/>
         <property file="${phing.dir}/build/configuration/default.properties"/>
 
         <customHook hook="after-read-properties"/>
     </target>
 
     <target name="util:environment"
-            description="get the current environment"
             hidden="true">
 
         <if>
@@ -37,6 +35,20 @@
                        message="Please specify the Project environment: "/>
             </else>
         </if>
+    </target>
+
+    <target name="util:db:clean"
+            depends="util:properties,
+            database:properties,
+            tests-setup:properties,
+            magento:cache:clean,
+            database:drop,
+            tests-setup:integration:db:drop"
+            hidden="true">
+
+        <customHook hook="after-util-db-clean"/>
+
+        <echo message="Clean up databases done"/>
     </target>
 
 </project>

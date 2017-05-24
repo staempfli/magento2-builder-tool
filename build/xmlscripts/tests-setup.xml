@@ -28,7 +28,7 @@
             hidden="true">
 
         <property name="test.integration.db.host" value="${database.host}"/>
-        <property name="test.integration.db.name" value="${database.name}_integration_tests"/>
+        <property name="test.integration.db.name" value="${database.name}_igr_tests"/>
         <property name="test.integration.db.user" value="${database.user}"/>
         <property name="test.integration.db.password" value="${database.password}"/>
     </target>

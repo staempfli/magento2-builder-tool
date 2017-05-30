@@ -157,9 +157,9 @@
                       verbose="true">
                     <filterchain>
                         <replacetokens begintoken="{{" endtoken="}}">
-                            <token key="DOCUMENT_ROOT" value="${phing.dir}/${magento.dir}" />
+                            <token key="DOCUMENT_ROOT" value="${application.startdir}/${magento.dir}" />
                             <token key="SERVER_NAME" value="${project.name}" />
-                            <token key="LOGS_DIR" value="${phing.dir}/${logs.dir}" />
+                            <token key="LOGS_DIR" value="${application.startdir}/${logs.dir}" />
                             <token key="USER_HOME" value="${user.home}" />
                         </replacetokens>
                     </filterchain>

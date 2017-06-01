@@ -13,7 +13,7 @@
     <import file="${phing.dir}/build/xmlscripts/util.xml"/>
 
     <!-- Project specific custom scripts for executing possible hooks -->
-    <import file="${application.startdir}/scripts/phing/custom.xml" optional="true"/>
+    <import file="${application.startdir}/config/mg2-builder/xmlscripts/custom.xml" optional="true"/>
 
     <includepath classpath="${phing.dir}/build/phpscripts/Util"/>
     <taskdef name="executeTarget" classname="ExecuteTargetTask"/>

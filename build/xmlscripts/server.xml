@@ -20,11 +20,12 @@
 
     </target>
 
-    <target name="server:show:available"
-            description="Display list of available servers"
-            depends="server:configurations:load">
+    <target name="server:available:show"
+            depends="util:properties,
+            server:configurations:load"
+            hidden="true">
 
-        <echo message="${servers.available}"/>
+        <echo message="AVAILABLE_SERVERS=${servers.available}"/>
 
     </target>
 

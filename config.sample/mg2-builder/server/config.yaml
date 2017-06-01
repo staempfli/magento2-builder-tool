@@ -2,14 +2,17 @@ DEV:
   host: example.server.host
   port: 22
   rootDir: /home/<project_name>/public_html
+  deployUsername: <project_name>
 
 IGR:
   host: example.server.host
   port: 22
   rootDir: /home/<project_name>/public_html
+  deployUsername: <project_name>
 
 PRD:
   host: example.server.host
   port: 22
   rootDir: /home/<project_name>/public_html
+  deployUsername: <project_name>
 

@@ -10,8 +10,7 @@
 <project name="Release" default="..." basedir=".">
 
     <target name="release:finish"
-            description="Finishes release/hotfix and pushes corresponding branches and tags">
-
+            description="Finish release/hotfix and push everything">
         <if>
             <not>
                 <isset property="release.type"/>
@@ -29,55 +28,31 @@
             </then>
         </if>
 
-        <!-- Before we finish the release/hotfix, we need to merge it with the latest master version
-        just in case that something new was deployed during the implementation of this release/hotfix -->
-        <exec command="cd ${application.startdir} &amp;&amp; git remote show | head -1" outputProperty="git.remote" checkreturn="true"/>
-        <property name="command.pull.master" value="cd ${application.startdir} &amp;&amp; git pull ${git.remote} master"/>
-        <echo message="${command.pull.master}"/>
-        <exec command="${command.pull.master}" checkreturn="true" logoutput="true"/>
-        <echo message=""/>
-
-        <!-- Merge release/hotfix with current master version -->
-        <property name="command.merge.master" value="cd ${application.startdir} &amp;&amp; git checkout ${release.type}/${release.version} &amp;&amp; git merge master"/>
-        <echo message="${command.merge.master}"/>
-        <exec command="${command.merge.master}" checkreturn="true" logoutput="true"/>
-        <echo message=""/>
-
-        <!-- We need to set and unset GIT_MERGE_AUTOEDIT in order to skip step to add manually a comment after release merge -->
-        <exec command="export GIT_MERGE_AUTOEDIT=no" checkreturn="true" logoutput="true"/>
-        <property name="command.finish.release" value="cd ${application.startdir} &amp;&amp; git flow ${release.type} finish -m &quot;new_tag&quot; ${release.version}"/>
-        <echo message="${command.finish.release}"/>
-        <exec command="${command.finish.release}" checkreturn="true" logoutput="true"/>
-        <exec command="unset GIT_MERGE_AUTOEDIT" checkreturn="true" logoutput="true"/>
-
-        <phingcall target="release:git:push"/>
+        <property name="command.release.finish" value="git flow finish ${release.type} --fetch --message=&quot;New Tag ${release.version}&quot; --push ${release.version}"/>
+        <echo message="${command.release.finish}"/>
+        <exec command="${command.release.finish}" checkreturn="true" logoutput="true"/>
 
     </target>
 
-    <target name="release:git:push"
-            description="Push master and develop branches and also tags"
-            hidden="true">
+    <target name="release:deploy"
+            description="Deploy new version to server"
+            depends="util:properties,
+            server:properties">
 
-        <exec command="cd ${application.startdir} &amp;&amp; git remote show | head -1" outputProperty="git.remote" checkreturn="true"/>
+        <if>
+            <not>
+                <isset property="release.version"/>
+            </not>
+            <then>
+                <input propertyName="release.version" message="Version to deploy: "/>
+            </then>
+        </if>
 
-        <property name="command.fetch" value="cd ${application.startdir} &amp;&amp; git fetch"/>
-        <echo message="${command.fetch}"/>
-        <exec command="${command.fetch}" checkreturn="true" logoutput="true"/>
-        <echo message=""/>
-
-        <property name="command.pull.all" value="cd ${application.startdir} &amp;&amp; git pull --all"/>
-        <echo message="${command.pull.all}"/>
-        <exec command="${command.pull.all}" checkreturn="true" logoutput="true"/>
-        <echo message=""/>
-
-        <property name="command.push.develop" value="cd ${application.startdir} &amp;&amp; git push ${git.remote} develop:develop --follow-tags"/>
-        <echo message="${command.push.develop}"/>
-        <exec command="${command.push.develop}" checkreturn="true" logoutput="true"/>
-        <echo message=""/>
-
-        <property name="command.push.master" value="cd ${application.startdir} &amp;&amp; git push ${git.remote} master:master --follow-tags"/>
-        <echo message="${command.push.master}"/>
-        <exec command="${command.push.master}" checkreturn="true" logoutput="true"/>
+        <property name="command.release.deploy" value="ssh -p ${server.ssh.port} ${server.ssh.deployUsername}@${server.ssh.host} &quot; ${release.deploy.server.command} &quot;"/>
+        <echo message="${command.release.deploy}" />
+        <exec command="${command.release.deploy}"
+              logoutput="true"
+              checkreturn="true"/>
 
     </target>
 

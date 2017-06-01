@@ -1,7 +1,0 @@
-LOCAL:
-  web/unsecure/base_url:
-    default:
-      0: "http://${project.name}.lo/"
-  web/secure/base_url:
-    default:
-      0: "http://${project.name}.lo/"

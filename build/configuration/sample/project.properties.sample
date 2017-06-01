@@ -1,7 +1,0 @@
-#------------------------------------------------------------------------------------------
-# General Project Information
-#------------------------------------------------------------------------------------------
-
-# Project name. Used for setting the Database and configuration filenames.
-project.name=<project-name>
-

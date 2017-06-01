@@ -10,7 +10,6 @@
 <project name="Database" default="..." basedir=".">
 
     <target name="database:properties"
-            description="Get Database Properties"
             hidden="true">
 
         <property name="database.user" value="${project.name}"/>
@@ -55,7 +54,6 @@
     </target>
 
     <target name="database:user:create"
-            description="Setup Database user and grant privileges"
             hidden="true"
             unless="skipDbUserCreation"
             logskipped="true">
@@ -70,7 +68,6 @@
     </target>
 
     <target name="database:create"
-            description="Create Clean Magento Database"
             hidden="true">
 
         <property name="command.create.database"
@@ -82,7 +79,6 @@
     </target>
 
     <target name="database:drop"
-            description="drops magento database"
             hidden="true">
 
         <property name="command.drop.database"
@@ -94,7 +90,6 @@
     </target>
 
     <target name="database:import"
-            description="Import mysql dump from specific location"
             depends="database:drop,
             database:create"
             hidden="true">

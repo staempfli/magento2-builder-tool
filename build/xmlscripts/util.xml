@@ -16,8 +16,8 @@
         <exec command="basename ${application.startdir}" outputProperty="project.name"/>
 
         <property file="${application.startdir}/../_conf/environment.properties"/>
-        <property file="${application.startdir}/config/project.properties"/>
-        <property file="${phing.dir}/build/configuration/default.properties"/>
+        <property file="${application.startdir}/config/mg2-builder/project.properties"/>
+        <property file="${phing.dir}/build/config/default.properties"/>
 
         <customHook hook="after-read-properties"/>
     </target>

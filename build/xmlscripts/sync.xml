@@ -13,7 +13,7 @@
             description="Sync DB and Media form remote server"
             depends="util:properties,
             util:environment,
-            server:properties,
+            sync:server:properties,
             sync:db,
             sync:media">
 
@@ -23,8 +23,23 @@
 
     </target>
 
+    <target name="sync:server:properties"
+            depends="server:properties"
+            hidden="true">
+
+        <if>
+            <not>
+                <isset property="server.ssh.username"/>
+            </not>
+            <then>
+                <input propertyName="server.ssh.username"
+                       message="${server.ssh.host}'s username: "/>
+            </then>
+        </if>
+
+    </target>
+
     <target name="sync:db"
-            description="Create Remote Database Dump and Import"
             depends="sync:db:dump,
             sync:db:download,
             database:import"
@@ -45,7 +60,6 @@
     </target>
 
     <target name="sync:db:dump"
-            description="Create Remote Mysql dump on specific server"
             hidden="true">
 
         <property name="sync.dump.filename"
@@ -64,7 +78,6 @@
     </target>
 
     <target name="sync:db:download"
-            description="Get Remote Mysql dump on specific server"
             hidden="true">
 
         <property name="sync.local.dumpDir" value="/tmp"/>
@@ -77,7 +90,6 @@
     </target>
 
     <target name="sync:media"
-            description="Sync Media data from specific server"
             hidden="true"
             unless="skipSyncMedia"
             logskipped="true">

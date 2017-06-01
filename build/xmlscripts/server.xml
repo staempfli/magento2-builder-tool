@@ -14,15 +14,21 @@
     <taskdef name="setAvailableServers" classname="setAvailableServers"/>
 
     <target name="server:configurations:load"
-            description="load servers configuration"
             hidden="true">
 
         <setAvailableServers/>
 
     </target>
 
+    <target name="server:show:available"
+            description="Display list of available servers"
+            depends="server:configurations:load">
+
+        <echo message="${servers.available}"/>
+
+    </target>
+
     <target name="server:properties"
-            description="Get server properties from yaml file"
             depends="server:configurations:load"
             hidden="true">
 
@@ -47,15 +53,6 @@
 
         <setServerProperties/>
 
-        <if>
-            <not>
-                <isset property="server.ssh.username"/>
-            </not>
-            <then>
-                <input propertyName="server.ssh.username"
-                       message="${server.ssh.host}'s username: "/>
-            </then>
-        </if>
     </target>
 
 </project>

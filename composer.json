@@ -16,6 +16,6 @@
   "bin": ["bin/mg2-builder"],
   "require": {
     "phing/phing": "2.*",
-    "n98/magerun2": "*"
+    "n98/magerun2": "^1.4"
   }
 }

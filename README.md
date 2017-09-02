@@ -10,28 +10,18 @@ composer require --dev "staempfli/magento2-builder-tool":"~1.0"
 
 ## Setup
 
-### Required Packages
-
-To use `sync` capabilities, this tool requires that [n98-magerun2](https://github.com/netz98/n98-magerun2) is installed in your project:
-
-```
-composer require "n98/magerun2":"^1.4"
-```
-
-### Settings configuration
-
-#### Create config
+### Config Folder
 
 ```
 cp -r <vendor_path>/staempfli/magento2-builder-tool/config.sample/ config
 ```
 
-* Set your custom default `core_config_data` settings on `config/mg2-builder/magento/config.yaml`
-* Set servers configuration on `config.sample/mg2-builder/server/config.yaml`
+* Set the project custom `core_config_data` on `config/mg2-builder/magento/config.yaml`
+* Set the project servers settings on `config.sample/mg2-builder/server/config.yaml`
 
 **NOTE:** You only need to replace parameters between `<>` with your corresponding values. All other placehoders like `${}` or `{{}}` will be automatically replaced during the tool execution
 
-#### Create logs folder
+### Create logs folder
 
 ```
 mkdir logs
@@ -42,12 +32,12 @@ vim logs/.gitignore
 !.gitignore
 ```
 
-#### Properties
+### Custom Properties
 
 You can customise all properties according to your needs:
 
 * Properties added in `config/mg2-builder/project.properties` have the highest priority and will overwrite default ones
-* You can check all default properties that can be customised on:
+* Check all properties that can be customised here:
 	* [build/config/default.properties](build/config/default.properties)
 
 ## Usage
@@ -65,19 +55,37 @@ You can customise all properties according to your needs:
 	* `bin/mg2-builder sync`
 
 ### TIPS
-If you are tired of writing over and over again some of the questions during the process, you can setup your default environment parameters as follows:
+If you do not want to input over and over again the properties required, you can setup your default environment parameters as follows:
 
-1. Create the folder `_conf` one level higher than your project root.
+1. Create folder `_conf` at one level higher than your project root.
 
-2. Add a file called `environment.properties` inside that folder.
+2. Add a new file `environment.properties` inside that folder.
 
-3. Inside this file you can specify your default environment preferences as follows:
+3. Inside this file you can specify your environment properties as follows:
 
 ```
 project.environment=<your_environment_type> (usually Local)
 database.admin.username=<your_database_admin_user>
-environment.server.type=<your_server_type> (apache or nginx)
+environment.server.type=<your_server_type> (apache, nginx or none)
 environment.vhosts.dir=<your_preferred_vhost.d_path>
+```
+
+## Custom scripts
+
+If you need additional scripts to build your projects, you can add them here:
+
+* `config/mg2-builder/xmlscripts/custom.xml`
+
+You can also define targets that will be automatically executed during the build process.
+This tool contains `customHooks` that can be listened to dispatch other targets.
+You can set inside `config/mg2-builder/project.properties` the targets to be executed by these hooks:
+
+```
+vim config/mg2-builder/xmlscripts/custom.xml
+before-magento-install = <your-custom-target>
+after-sync = <your-custom-target>
+after-tests-setup-integration = <your-custom-target>
+after-util-db-clean = <your-custom-target>
 ```
 
 ## Prerequisites

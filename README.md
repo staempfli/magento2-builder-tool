@@ -10,9 +10,9 @@ composer require --dev "staempfli/magento2-builder-tool":"~1.0"
 
 ## Demo
 
-<a href="https://www.youtube.com/watch?v=wXt04uaZK7M&list=PLBt8dizedSZDtc1kEH2iCJGodWqQ5T6XN
-" target="_blank"><img src="docs/images/youtube/playlist.png"
-alt="Magento2 Builder Playlist" width="240" height="180" border="10" /></a>
+<a href="https://www.youtube.com/watch?v=wXt04uaZK7M&list=PLBt8dizedSZDtc1kEH2iCJGodWqQ5T6XN" target="_blank">
+  <img src="docs/images/youtube/playlist.png"alt="Magento2 Builder Playlist" width="240" height="180" border="10" />
+</a>
 
 ## Setup
 

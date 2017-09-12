@@ -8,6 +8,12 @@ Tool to automatically build Magento2 projects and sync data from remote servers
 composer require --dev "staempfli/magento2-builder-tool":"~1.0"
 ```
 
+## Demo
+
+<a href="https://www.youtube.com/watch?v=wXt04uaZK7M&list=PLBt8dizedSZDtc1kEH2iCJGodWqQ5T6XN
+" target="_blank"><img src="docs/images/youtube/playlist.png"
+alt="Magento2 Builder Playlist" width="240" height="180" border="10" /></a>
+
 ## Setup
 
 ### Config Folder
@@ -54,7 +60,10 @@ You can customise all properties according to your needs:
 
 	* `bin/mg2-builder sync`
 
-### TIPS
+## TIPS
+
+### Local settings
+
 If you do not want to input over and over again the properties required, you can setup your default environment parameters as follows:
 
 1. Create folder `_conf` at one level higher than your project root.
@@ -68,6 +77,15 @@ project.environment=<your_environment_type> (usually Local)
 database.admin.username=<your_database_admin_user>
 environment.server.type=<your_server_type> (apache, nginx or none)
 environment.vhosts.dir=<your_preferred_vhost.d_path>
+```
+
+### SSH without password
+
+To skip entering the ssh password every time, you can use `ssh-copy-id` to automatically set the public-private keys on the server.
+Simply execute:
+
+```
+ssh-copy-id user@server-domain
 ```
 
 ## Custom scripts
@@ -88,6 +106,18 @@ after-tests-setup-integration = <your-custom-target>
 after-util-db-clean = <your-custom-target>
 ```
 
+## Disclaimer
+
+In order to use sync functionalities, `n98-magenrun2` must be available on the remote server. The easiest way is to add it as part as your project dependencies:
+
+```
+composer require "n98/magerun2":"^1.4"
+```
+
+If you install `n98-magerun2` in your server in another way, be sure to configure the parameter `sync.bin.n98-magerun2` accordingly:
+
+* [build/config/default.properties#L26](build/config/default.properties#L26)
+
 ## Prerequisites
 
 - PHP >= 7.0.*
@@ -103,4 +133,4 @@ Licence
 
 Copyright
 ---------
-(c) 2016 Staempfli AG
+(c) 2017 Staempfli AG

@@ -1,6 +1,7 @@
 {
   "name": "staempfli/magento2-builder-tool",
   "description": "Staempfli AG Magento2 Builder Tool",
+  "keywords": ["magento2", "tool", "build", "development", "environment", "sync"],
   "license": [
     "GPL-3.0"
   ],

@@ -1,6 +1,7 @@
 # Magento 2 Builder tool
 
-Tool to automatically build Magento2 projects and sync data from remote servers
+Tool to automatically build Magento2 projects and sync data from remote servers.
+
 
 ## Installation
 
@@ -13,6 +14,42 @@ composer require --dev "staempfli/magento2-builder-tool":"~1.0"
 <a href="https://www.youtube.com/watch?v=wXt04uaZK7M&list=PLBt8dizedSZDtc1kEH2iCJGodWqQ5T6XN" target="_blank">
   <img src="docs/images/youtube/playlist.png"alt="Magento2 Builder Playlist" width="240" height="180" border="10" />
 </a>
+
+## Introduction
+
+`magento2-builder-tool` is a tool to setup local environments for your Magento2 projects by executing one command. No Docker, no Vagrant needed but it is also compatible inside those virtualised setups. Database, Apache/Nginx configuration and everything else are created automatically for each project. You can even use `sync` mode to get server data copied locally.
+
+Do you know [Laravel Valet](https://github.com/laravel/valet)? That is quite the same but for Magento2.
+
+This tool is also meant for `CI` environments to automate the step of creating the build. You can use it to get your project generated before executing the tests.
+
+What this tool does for you:
+
+```
+1. Create Magento Database
+2. Create Integration Test Database
+3. Magento Install
+4. Sync Data From Server
+5. Update core_core_data for your environment
+6. setup:upgrade
+7. clean cache
+8. Setup Apache/Nginx configuration
+```
+
+Only manual step is to edit your `/etc/hosts` 
+
+### DnsMasq on MAC
+
+On `OS X` you can even skip the manual step of editing the `etc/hosts` by using `dnsmasq`. You can configure it to automatically load all `*.dev` or `*.lo` urls (`*.local` does not work).
+
+* [Never Touch Your Local /etc/hosts File in OS X Again](http://alanthing.com/blog/2012/04/24/never-touch-your-local-etchosts-file-os-x-again/)
+
+**NOTE**: When adding a new `dnsmasq`, you need to reload the `dnsmasq daemon`:
+
+```
+sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+```
 
 ## Setup
 
@@ -117,6 +154,18 @@ composer require "n98/magerun2":"^1.4"
 If you install `n98-magerun2` in your server in another way, be sure to configure the parameter `sync.bin.n98-magerun2` accordingly:
 
 * [build/config/default.properties#L26](build/config/default.properties#L26)
+
+## Troubleshooting
+
+#### MySQL server has gone away
+
+*  **Problem**: On Mac computers, `MySQL` crashes sometime when creating, importing or updating the Magento database.
+
+* **Solution**: Kill MySQL process, start MySQL and try again: 
+
+	1. `killall -9 mysqld`
+	2. `mysql.server start` or `mysql.server restart`
+	3. Try again: `mg2-builder install`
 
 ## Prerequisites
 

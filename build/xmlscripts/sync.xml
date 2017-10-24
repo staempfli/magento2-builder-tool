@@ -110,7 +110,7 @@
         </if>
 
         <property name="sync.media.command"
-                  value='rsync -aK -e &quot;ssh -p ${server.ssh.port}&quot; --stats ${sync.media.source} ${sync.media.dest} ${sync.media.excludes}'
+                  value='rsync -aKL -e &quot;ssh -p ${server.ssh.port}&quot; --stats ${sync.media.source} ${sync.media.dest} ${sync.media.excludes}'
                   override="true"/>
         <echo message="${sync.media.command}"/>
         <exec command="${sync.media.command}"

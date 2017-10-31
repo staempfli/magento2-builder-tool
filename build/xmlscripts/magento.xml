@@ -73,8 +73,17 @@
 
     <target name="magento:setup:upgrade"
             hidden="true">
+        <if>
+            <equals arg1="${setup.upgrade.keep.generated}" arg2="1"/>
+            <then>
+                <property name="param.keep.generated" value="--keep-generated" override="true"/>
+            </then>
+            <else>
+                <property name="param.keep.generated" value="" override="true"/>
+            </else>
+        </if>
 
-        <property name="command.setup.upgrade" value="${bin.n98-magerun2} setup:upgrade" />
+        <property name="command.setup.upgrade" value="${bin.n98-magerun2} setup:upgrade ${param.keep.generated}" />
         <echo message="running ${command.setup.upgrade}"/>
         <exec command="${command.setup.upgrade}" checkreturn="true" logoutput="true" />
     </target>

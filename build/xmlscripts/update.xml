@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * sync.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Update" default="..." basedir=".">
+
+    <target name="update"
+            description="Update Project to latest status (git pull, composer install, setup:upgrade)"
+            depends="util:properties,
+            util:environment">
+
+        <property name="command.git.pull" value="git pull"/>
+        <echo message="${command.git.pull}" />
+        <exec command="${command.git.pull}" checkreturn="true" logoutput="true"/>
+
+        <property name="command.composer.install" value="composer install"/>
+        <echo message="${command.composer.install}" />
+        <exec command="${command.composer.install}" checkreturn="true" logoutput="true"/>
+
+        <property name="setup.upgrade.keep.generated" value="0" override="true"/>
+        <phingcall target="magento:setup:upgrade"/>
+        <phingcall target="magento:cache:clean"/>
+
+        <echo message="All updated successfully"/>
+
+    </target>
+
+</project>

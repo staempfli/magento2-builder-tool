@@ -19,8 +19,6 @@ composer require --dev "staempfli/magento2-builder-tool":"~1.0"
 
 `magento2-builder-tool` is a tool to setup local environments for your Magento2 projects by executing one command. No Docker, no Vagrant needed but it is also compatible inside those virtualised setups. Database, Apache/Nginx configuration and everything else are created automatically for each project. You can even use `sync` mode to get server data copied locally.
 
-Do you know [Laravel Valet](https://github.com/laravel/valet)? That is quite the same but for Magento2.
-
 This tool is also meant for `CI` environments to automate the step of creating the build. You can use it to get your project generated before executing the tests.
 
 What this tool does for you:

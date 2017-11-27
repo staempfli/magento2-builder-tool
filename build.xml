@@ -12,6 +12,7 @@
     <import file="${phing.dir}/build/xmlscripts/tests-setup.xml"/>
     <import file="${phing.dir}/build/xmlscripts/util.xml"/>
     <import file="${phing.dir}/build/xmlscripts/update.xml"/>
+    <import file="${phing.dir}/build/xmlscripts/artifact.xml"/>
 
     <!-- Project specific custom scripts for executing possible hooks -->
     <import file="${application.startdir}/config/mg2-builder/xmlscripts/custom.xml" optional="true"/>

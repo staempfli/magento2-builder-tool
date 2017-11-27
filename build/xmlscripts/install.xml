@@ -140,7 +140,7 @@
                     <then>
                         <input propertyName="environment.vhost.dir"
                                defaultValue="/var/www/_conf"
-                               message="Please set your absolute path to vhost.d: "/>
+                               message="Absolute path to vhost.d: "/>
                     </then>
                 </if>
 

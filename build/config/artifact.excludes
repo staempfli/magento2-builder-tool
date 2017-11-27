@@ -1,0 +1,16 @@
+cache
+page_cache
+_cache
+pub/media
+env.php
+tests
+Test
+Tests
+log
+logs
+magento2-builder-tool
+bin/mg2-builder
+.git
+.gitattributes
+.gitignore
+.gitmodules

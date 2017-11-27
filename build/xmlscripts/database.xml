@@ -102,7 +102,7 @@
                 </and>
             </not>
             <then>
-                <input message="Please specify the dump filename" propertyName="dump.local.absolutePath"/>
+                <input message="DB dump filename" propertyName="dump.local.absolutePath"/>
             </then>
         </if>
 

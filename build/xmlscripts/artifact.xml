@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * artifact.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<project name="Artifact" default="..." basedir=".">
+
+    <target name="artifact:transfer"
+            description="Create and Transfer built artifact [-Dartifact.name, -Duse.server.properties]"
+            depends="util:properties,
+            artifact:create">
+        <if>
+            <isset property="use.server.properties"/>
+            <then>
+                <executeTarget target="server:properties" />
+            </then>
+        </if>
+
+        <echo message="${command.artifact.transfer}" />
+        <exec command="${command.artifact.transfer}"
+              logoutput="true"
+              checkreturn="true"/>
+    </target>
+
+    <target name="artifact:create"
+            description="Generate artifact archive"
+            depends="artifact:build,
+            artifact:magento:generate:files"
+            hidden="true">
+        <if>
+            <not>
+                <isset property="artifact.name"/>
+            </not>
+            <then>
+                <input propertyName="artifact.name" message="Artifact name: "/>
+            </then>
+        </if>
+        <property name="artifact.filename" value="${artifact.dir}/${artifact.name}.tar.gz"/>
+        <echo message="${command.artifact.package}"/>
+        <exec command="${command.artifact.package}" checkreturn="true" logoutput="true"/>
+    </target>
+
+    <target name="artifact:build"
+            hidden="true">
+
+        <echo message="${command.artifact.build}"/>
+        <exec command="${command.artifact.build}" checkreturn="true" logoutput="true"
+              outputProperty="command.artifact.build.output"/>
+        <phingcall target="util:check:output">
+            <property name="check.output" value="${command.artifact.build.output}" override="true"/>
+        </phingcall>
+    </target>
+
+    <target name="artifact:magento:generate:files"
+            depends="artifact:di:compile,
+            artifact:static-content:deploy"
+            hidden="true">
+
+        <echo message="All magento files were successfully generated" />
+
+    </target>
+
+    <target name="artifact:di:compile"
+            hidden="true">
+
+        <property name="command.magento.compile" value="${bin.n98-magerun2} setup:di:compile"/>
+        <echo message="${command.magento.compile}"/>
+        <exec command="${command.magento.compile}" checkreturn="true" logoutput="true"
+              outputProperty="command.magento.compile.output"/>
+        <phingcall target="util:check:output">
+            <property name="check.output" value="${command.magento.compile.output}" override="true"/>
+        </phingcall>
+    </target>
+
+    <target name="artifact:static-content:deploy"
+            hidden="true">
+
+        <property name="command.magento.static-content"
+                  value="${bin.n98-magerun2} setup:static-content:deploy -f ${static-content.languages} ${command.static-content.deploy.options}"/>
+        <echo message="${command.magento.static-content}"/>
+        <exec command="${command.magento.static-content}" checkreturn="true" logoutput="true"
+              outputProperty="command.magento.static-content.output" />
+
+        <phingcall target="util:check:output">
+            <property name="check.output" value="${command.magento.static-content.output}" override="true"/>
+        </phingcall>
+    </target>
+
+</project>

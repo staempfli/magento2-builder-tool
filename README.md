@@ -57,6 +57,7 @@ sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 cp -r <vendor_path>/staempfli/magento2-builder-tool/config.sample/ config
 ```
 
+* Set the project languages and other configuration into `config/project.properties`
 * Set the project custom `core_config_data` on `config/mg2-builder/magento/config.yaml`
 * Set the project servers settings on `config.sample/mg2-builder/server/config.yaml`
 
@@ -77,7 +78,7 @@ vim logs/.gitignore
 
 You can customise all properties according to your needs:
 
-* Properties added in `config/mg2-builder/project.properties` have the highest priority and will overwrite default ones
+* Properties added in `config/mg2-builder/build.properties` and `config/project.properties` have higher priority and will overwrite default ones
 * Check all properties that can be customised here:
 	* [build/config/default.properties](build/config/default.properties)
 

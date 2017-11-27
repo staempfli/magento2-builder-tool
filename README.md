@@ -6,7 +6,7 @@ Tool to automatically build Magento2 projects and sync data from remote servers.
 ## Installation
 
 ```
-composer require --dev "staempfli/magento2-builder-tool":"~1.0"
+composer require "staempfli/magento2-builder-tool":"~2.0"
 ```
 
 ## Demo

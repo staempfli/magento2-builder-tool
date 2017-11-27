@@ -10,7 +10,7 @@
 <project name="Artifact" default="..." basedir=".">
 
     <target name="artifact:transfer"
-            description="Create and Transfer built artifact [-Dartifact.name, -Duse.server.properties]"
+            description="Create and transfer built artifact [-Dartifact.name, -Duse.server.properties]"
             depends="util:properties,
             artifact:create">
         <if>

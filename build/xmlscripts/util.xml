@@ -16,7 +16,8 @@
         <exec command="basename ${application.startdir}" outputProperty="project.name"/>
 
         <property file="${application.startdir}/../_conf/environment.properties"/>
-        <property file="${application.startdir}/config/mg2-builder/project.properties"/>
+        <property file="${application.startdir}/config/project.properties"/>
+        <property file="${application.startdir}/config/mg2-builder/build.properties"/>
         <property file="${phing.dir}/build/config/default.properties"/>
 
         <customHook hook="after-read-properties"/>
@@ -28,11 +29,11 @@
         <if>
             <isset property="project.environment"/>
             <then>
-                <echo message="Environment already set to ${project.environment}"/>
+                <echo message="Local environment already set to ${project.environment}"/>
             </then>
             <else>
                 <input propertyName="project.environment" validArgs="local,igr"
-                       message="Please specify the Project environment: "/>
+                       message="Local Environment: "/>
             </else>
         </if>
     </target>
@@ -49,6 +50,30 @@
         <customHook hook="after-util-db-clean"/>
 
         <echo message="Clean up databases done"/>
+    </target>
+
+    <target name="util:check:output"
+            description="Checks that output from command does not contain errors"
+            hidden="true">
+        <if>
+            <or>
+                <and>
+                    <contains string="${check.output}" substring="error" casesensitive="false"/>
+                    <not><contains string="${check.output}" substring="errors: 0" casesensitive="false"/></not>
+                </and>
+                <contains string="${check.output}" substring="denied" casesensitive="false"/>
+                <contains string="${check.output}" substring="failed" casesensitive="false"/>
+                <contains string="${check.output}" substring="Exception" casesensitive="false"/>
+                <contains string="${check.output}" substring="is undefined in file" casesensitive="false"/>
+            </or>
+            <then>
+                <echo message="${check.output}" level="error"/>
+                <fail message="Command failed" />
+            </then>
+            <else>
+                <echo message="Output does not contain any errors" />
+            </else>
+        </if>
     </target>
 
 </project>

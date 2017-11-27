@@ -31,14 +31,12 @@
         <property name="command.release.finish" value="git flow ${release.type} finish --fetch --message=&quot;New Tag ${release.version}&quot; --push ${release.version}"/>
         <echo message="${command.release.finish}"/>
         <exec command="${command.release.finish}" checkreturn="true" logoutput="true"/>
-
     </target>
 
     <target name="release:deploy"
             description="Deploy new version to server"
             depends="util:properties,
             server:properties">
-
         <if>
             <not>
                 <isset property="release.version"/>
@@ -53,7 +51,6 @@
         <exec command="${command.release.deploy}"
               logoutput="true"
               checkreturn="true"/>
-
     </target>
 
 </project>

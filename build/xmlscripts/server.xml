@@ -44,11 +44,11 @@
         <if>
             <isset property="remote.environment"/>
             <then>
-                <echo message="Remote Environment already set to ${remote.environment}"/>
+                <echo message="Server already set to ${remote.environment}"/>
             </then>
             <else>
                 <input propertyName="remote.environment" validArgs="${servers.available}"
-                       message="Please specify the Remote environment to get the data from: "/>
+                       message="Server: "/>
             </else>
         </if>
 

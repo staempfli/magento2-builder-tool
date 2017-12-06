@@ -57,7 +57,8 @@
 
     <target name="artifact:magento:generate:files"
             depends="artifact:di:compile,
-            artifact:static-content:deploy"
+            artifact:static-content:deploy,
+            artifact:permissions"
             hidden="true">
 
         <echo message="All magento files were successfully generated" />
@@ -88,6 +89,14 @@
         <phingcall target="util:check:output">
             <property name="check.output" value="${command.magento.static-content.output}" override="true"/>
         </phingcall>
+    </target>
+
+    <target name="artifact:permissions"
+            hidden="true">
+
+        <property name="command.magento.permissions" value="cd ${application.startdir} &amp;&amp; ${command.permissions}"/>
+        <echo message="${command.magento.permissions}"/>
+        <exec command="${command.magento.permissions}" checkreturn="true" logoutput="true"/>
     </target>
 
 </project>

@@ -6,7 +6,7 @@ env.php
 tests
 Test
 Tests
-log
+var/log
 logs
 magento2-builder-tool
 bin/mg2-builder

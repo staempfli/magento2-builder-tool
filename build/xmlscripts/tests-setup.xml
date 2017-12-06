@@ -9,6 +9,20 @@
 -->
 <project name="tests-setup" default="..." basedir=".">
 
+    <target name="test-setup:install"
+            description="Create DB and settings for integration tests"
+            depends="util:properties,
+            database:properties,
+            database:user:create,
+            test-setup:integration"
+            hidden="true">
+
+        <echo message="****************************************************************************"/>
+        <echo message="Installation For executing tests complete"/>
+        <echo message="You can start testing!"/>
+        <echo message="****************************************************************************"/>
+    </target>
+
     <target name="test-setup:integration"
             depends="tests-setup:properties,
             tests-setup:integration:template,

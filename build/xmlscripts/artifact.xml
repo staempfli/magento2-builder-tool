@@ -94,7 +94,7 @@
     <target name="artifact:permissions"
             hidden="true">
 
-        <property name="command.magento.permissions" value="cd ${application.startdir} &amp;&amp; ${command.permissions}"/>
+        <property name="command.magento.permissions" value="cd ${magento.dir} &amp;&amp; ${command.permissions}"/>
         <echo message="${command.magento.permissions}"/>
         <exec command="${command.magento.permissions}" checkreturn="true" logoutput="true"/>
     </target>

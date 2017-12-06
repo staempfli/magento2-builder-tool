@@ -25,7 +25,7 @@
               logoutput="true"
               checkreturn="true"/>
 
-        <delete dir="${artifact.filename}" failonerror="true" verbose="true"/>
+        <delete file="${artifact.filename}" failonerror="true" verbose="true"/>
     </target>
 
     <target name="artifact:create"

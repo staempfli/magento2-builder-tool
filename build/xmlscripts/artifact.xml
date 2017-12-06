@@ -24,6 +24,8 @@
         <exec command="${command.artifact.transfer}"
               logoutput="true"
               checkreturn="true"/>
+
+        <delete dir="${artifact.filename}" failonerror="true" verbose="true"/>
     </target>
 
     <target name="artifact:create"

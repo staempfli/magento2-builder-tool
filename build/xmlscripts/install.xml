@@ -31,7 +31,6 @@
 
     <target name="install:allowed"
             hidden="true">
-
         <if>
             <equals arg1="${project.environment}" arg2="local"/>
             <then>
@@ -41,13 +40,11 @@
                 <fail message="Environment &quot;${project.environment}&quot; is NOT valid environment for executing this action. This action can be executed only on Local environments"/>
             </else>
         </if>
-
     </target>
 
     <target name="install:type:set"
             depends="server:configurations:load"
             hidden="true">
-
         <if>
             <and>
                 <isset property="servers.available"/>
@@ -84,22 +81,21 @@
               verbose="true">
             <filterchain>
                 <replacetokens begintoken="{{" endtoken="}}">
-                    <token key="ENCRYPTION_KEY" value="${encryption.key}" />
-                    <token key="DATABASE_HOST" value="${database.host}" />
-                    <token key="DATABASE_USER" value="${database.user}" />
-                    <token key="DATABASE_PASS" value="${database.password}" />
-                    <token key="DATABASE_NAME" value="${database.name}" />
-                    <token key="ADMIN_FRONTNAME" value="${magento.admin.frontname}" />
-                    <token key="INSTALL_DATE" value="${env.install.date.config}" />
+                    <token key="ENCRYPTION_KEY" value="${encryption.key}"/>
+                    <token key="DATABASE_HOST" value="${database.host}"/>
+                    <token key="DATABASE_USER" value="${database.user}"/>
+                    <token key="DATABASE_PASS" value="${database.password}"/>
+                    <token key="DATABASE_NAME" value="${database.name}"/>
+                    <token key="ADMIN_FRONTNAME" value="${magento.admin.frontname}"/>
+                    <token key="INSTALL_DATE" value="${env.install.date.config}"/>
                 </replacetokens>
             </filterchain>
         </copy>
     </target>
 
-
     <target name="install:initialize"
             depends="magento:cache:clean"
-            hidden="true" >
+            hidden="true">
         <if>
             <equals arg1="${install.type}" arg2="sync"/>
             <then>
@@ -152,16 +148,15 @@
                       verbose="true">
                     <filterchain>
                         <replacetokens begintoken="{{" endtoken="}}">
-                            <token key="DOCUMENT_ROOT" value="${application.startdir}/${magento.dir}" />
-                            <token key="SERVER_NAME" value="${project.name}" />
-                            <token key="LOGS_DIR" value="${application.startdir}/${logs.dir}" />
-                            <token key="USER_HOME" value="${user.home}" />
+                            <token key="DOCUMENT_ROOT" value="${application.startdir}/${magento.dir}"/>
+                            <token key="SERVER_NAME" value="${project.name}"/>
+                            <token key="LOGS_DIR" value="${application.startdir}/${logs.dir}"/>
+                            <token key="USER_HOME" value="${user.home}"/>
                         </replacetokens>
                     </filterchain>
                 </copy>
             </else>
         </if>
-
     </target>
 
 </project>

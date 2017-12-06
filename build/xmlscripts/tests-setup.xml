@@ -21,7 +21,6 @@
         <customHook hook="after-tests-setup-integration"/>
 
         <echo message="Integration-tests setup done"/>
-
     </target>
 
     <target name="tests-setup:properties"
@@ -49,7 +48,6 @@
                 </replacetokens>
             </filterchain>
         </copy>
-
     </target>
 
     <target name="tests-setup:integration:db:create"
@@ -60,7 +58,6 @@
         GRANT ALL ON `${test.integration.db.name}`.* TO `${test.integration.db.user}`@`${test.integration.db.host}` IDENTIFIED BY &quot;${test.integration.db.password}&quot;;'"
               checkreturn="true"
               logoutput="true"/>
-
     </target>
 
     <target name="tests-setup:integration:db:drop"
@@ -70,7 +67,6 @@
         DROP DATABASE IF EXISTS `${test.integration.db.name}`;'"
               checkreturn="true"
               logoutput="true"/>
-
     </target>
 
 </project>

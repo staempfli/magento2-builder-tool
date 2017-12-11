@@ -20,7 +20,7 @@
             install:config:env,
             install:initialize,
             install:vhost,
-            test-setup:integration">
+            tests-setup:integration">
 
         <echo message="****************************************************************************"/>
         <echo message="Installation Successful"/>

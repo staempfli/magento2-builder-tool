@@ -7,7 +7,7 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="tests-setup" default="..." basedir=".">
+<project name="test-setup" default="..." basedir=".">
 
     <target name="test-setup:install"
             description="Create DB and settings for integration tests"

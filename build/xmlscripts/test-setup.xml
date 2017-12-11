@@ -7,14 +7,14 @@
  * @author    juan.alonso@staempfli.com
  */
 -->
-<project name="test-setup" default="..." basedir=".">
+<project name="tests-setup" default="..." basedir=".">
 
-    <target name="test-setup:install"
+    <target name="tests-setup:install"
             description="Create DB and settings for integration tests"
             depends="util:properties,
             database:properties,
             database:user:create,
-            test-setup:integration"
+            tests-setup:integration"
             hidden="true">
 
         <echo message="****************************************************************************"/>
@@ -23,7 +23,7 @@
         <echo message="****************************************************************************"/>
     </target>
 
-    <target name="test-setup:integration"
+    <target name="tests-setup:integration"
             depends="tests-setup:properties,
             tests-setup:integration:template,
             tests-setup:integration:db:drop,

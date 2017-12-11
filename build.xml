@@ -9,7 +9,7 @@
     <import file="${phing.dir}/build/xmlscripts/release.xml"/>
     <import file="${phing.dir}/build/xmlscripts/server.xml"/>
     <import file="${phing.dir}/build/xmlscripts/sync.xml"/>
-    <import file="${phing.dir}/build/xmlscripts/test-setup.xml"/>
+    <import file="${phing.dir}/build/xmlscripts/tests-setup.xml"/>
     <import file="${phing.dir}/build/xmlscripts/util.xml"/>
     <import file="${phing.dir}/build/xmlscripts/update.xml"/>
     <import file="${phing.dir}/build/xmlscripts/artifact.xml"/>

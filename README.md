@@ -2,11 +2,10 @@
 
 Tool to automatically build Magento2 projects and sync data from remote servers.
 
-
 ## Installation
 
 ```
-composer require "staempfli/magento2-builder-tool":"~2.0"
+composer require "staempfli/magento2-builder-tool":"~3.0"
 ```
 
 ## Demo
@@ -19,9 +18,11 @@ composer require "staempfli/magento2-builder-tool":"~2.0"
 
 `magento2-builder-tool` is a tool to setup local environments for your Magento2 projects by executing one command. No Docker, no Vagrant needed but it is also compatible inside those virtualised setups. Database, Apache/Nginx configuration and everything else are created automatically for each project. You can even use `sync` mode to get server data copied locally.
 
-This tool is also meant for `CI` environments to automate the step of creating the build. You can use it to get your project generated before executing the tests.
+This tool is also meant for `CI` or `Build` environments to automate the step of creating the artifact.
 
 What this tool does for you:
+
+### LOCAL Environment
 
 ```
 1. Create Magento Database
@@ -33,20 +34,13 @@ What this tool does for you:
 7. clean cache
 8. Setup Apache/Nginx configuration
 ```
+Only manual step is to edit your `/etc/hosts`. If you want to automate that too, see [DnsMasq on MAC](#dnsMasq-on-mac)
 
-Only manual step is to edit your `/etc/hosts` 
-
-### DnsMasq on MAC
-
-On `OS X` you can even skip the manual step of editing the `etc/hosts` by using `dnsmasq`. You can configure it to automatically load all `*.dev` or `*.lo` urls (`*.local` does not work).
-
-* [Never Touch Your Local /etc/hosts File in OS X Again](http://alanthing.com/blog/2012/04/24/never-touch-your-local-etchosts-file-os-x-again/)
-
-**NOTE**: When adding a new `dnsmasq`, you need to reload the `dnsmasq daemon`:
+### CI / Build Environment
 
 ```
-sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+- Create DB for integration tests
+- Builds and transfer artifact that can be directly deployed on a server
 ```
 
 ## Setup
@@ -57,7 +51,7 @@ sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 cp -r <vendor_path>/staempfli/magento2-builder-tool/config.sample/ config
 ```
 
-* Set the project languages and other configuration into `config/project.properties`
+* Set the project languages and other configuration into `config/project.properties` or `config/mg2-builder/build.properties`
 * Set the project custom `core_config_data` on `config/mg2-builder/magento/config.yaml`
 * Set the project servers settings on `config.sample/mg2-builder/server/config.yaml`
 
@@ -82,7 +76,8 @@ You can customise all properties according to your needs:
 * Check all properties that can be customised here:
 	* [build/config/default.properties](build/config/default.properties)
 
-## Usage
+## LOCAL Environaments
+### Usage
 
 * List available targets:
 
@@ -96,9 +91,9 @@ You can customise all properties according to your needs:
 
 	* `bin/mg2-builder sync`
 
-## TIPS
+### TIPS
 
-### Local settings
+#### Local settings
 
 If you do not want to input over and over again the properties required, you can setup your default environment parameters as follows:
 
@@ -115,7 +110,7 @@ environment.server.type=<your_server_type> (apache, nginx or none)
 environment.vhosts.dir=<your_preferred_vhost.d_path>
 ```
 
-### SSH without password
+#### SSH without password
 
 To skip entering the ssh password every time, you can use `ssh-copy-id` to automatically set the public-private keys on the server.
 Simply execute:
@@ -123,6 +118,31 @@ Simply execute:
 ```
 ssh-copy-id user@server-domain
 ```
+
+#### <a name="dnsMasq-on-mac"></a>DnsMasq on MAC
+
+On `OS X` you can even skip the manual step of editing the `etc/hosts` by using `dnsmasq`. You can configure it to automatically load all `*.dev` or `*.lo` urls (`*.local` does not work).
+
+* [Never Touch Your Local /etc/hosts File in OS X Again](http://alanthing.com/blog/2012/04/24/never-touch-your-local-etchosts-file-os-x-again/)
+
+**NOTE**: When adding a new `dnsmasq`, you need to reload the `dnsmasq daemon`:
+
+```
+sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+```
+
+## CI / Build Environments
+### Usage
+
+* Create DB and settings for integration tests:
+
+	* `bin/mg2-builder tests-setup:install`
+
+* Create and transfer built artifact:
+
+	* `bin/mg2-builder artifact:transfer [-Dartifact.name, -Duse.server.properties]`
+
 
 ## Custom scripts
 
@@ -170,6 +190,10 @@ If you install `n98-magerun2` in your server in another way, be sure to configur
 
 - PHP >= 7.0.*
 - Mysql >= 5.7.*
+
+## ChangeLog
+
+[CHANGELOG.md](CHANGELOG.md)
 
 ## Developers
 

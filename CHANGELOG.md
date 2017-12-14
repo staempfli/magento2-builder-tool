@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [3.0] - 14-12-2017
+## [2.0] - 14-12-2017
 ### Added
 - New `artifact:transfer` to build and transfer artifacts. Uses config propagation features in `Magento >= 2.2`
 - New `tests-setup:install` to create integration test DB and settings without the need to install magento.

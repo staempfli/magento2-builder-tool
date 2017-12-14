@@ -5,7 +5,7 @@
 
 Tool to automatically build Magento2 projects and sync data from remote servers.
 
-####Local environments: 
+#### Local environments:
 * Set up local environment (DB, config, Server)
 * Install project's real data (Sync from Server)
 

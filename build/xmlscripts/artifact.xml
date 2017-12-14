@@ -58,13 +58,28 @@
     </target>
 
     <target name="artifact:magento:generate:files"
-            depends="artifact:di:compile,
+            depends="artifact:module:disable,
+            artifact:di:compile,
             artifact:static-content:deploy,
             artifact:permissions"
             hidden="true">
 
         <echo message="All magento files were successfully generated" />
+    </target>
 
+    <target name="artifact:module:disable"
+            hidden="true">
+        <if>
+            <equals arg1="${module.disable.list}" arg2="" />
+            <then>
+                <echo message="No modules to disable"/>
+            </then>
+            <else>
+                <property name="command.magento.module.disable" value="${bin.n98-magerun2} module:disable ${module.disable.list}"/>
+                <echo message="${command.magento.module.disable}"/>
+                <exec command="${command.magento.module.disable}" outputProperty="command.magento.module.disable.output" checkreturn="true" logoutput="true"/>
+            </else>
+        </if>
     </target>
 
     <target name="artifact:di:compile"

@@ -40,7 +40,7 @@ What this tool does for you:
 2. Create Integration Test Database
 3. Magento Install
 4. Sync Data From Server
-5. Update core_core_data for your environment
+5. Update core_config_data for your environment
 6. setup:upgrade
 7. clean cache
 8. Setup Apache/Nginx configuration

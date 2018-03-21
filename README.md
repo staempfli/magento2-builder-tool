@@ -189,9 +189,12 @@ If you install `n98-magerun2` in your server in another way, be sure to configur
 
 #### MySQL server has gone away
 
-*  **Problem**: On Mac computers, `MySQL` crashes sometime when creating, importing or updating the Magento database.
+*  **Problem**: `MySQL` crashes sometime when creating, importing or updating the Magento database.
 
-* **Solution**: Kill MySQL process, start MySQL and try again: 
+* **Solution**: Add following configuration in your `.my.cnf`
+	* Gist: [.my.conf](https://gist.github.com/jalogut/f507f13b27f7a63d936edd58fad5e121)
+
+* **How to restart mysql**: Kill MySQL process, start MySQL and try again:
 
 	1. `killall -9 mysqld`
 	2. `mysql.server start` or `mysql.server restart`

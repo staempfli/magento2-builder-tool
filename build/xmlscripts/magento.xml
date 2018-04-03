@@ -35,6 +35,13 @@
 
         <customHook hook="before-magento-install"/>
 
+        <echo message="Enable all Modules"/>
+
+        <property name="command.enable.all.modules" value="${bin.n98-magerun2} module:enable --all" />
+        <echo message="running ${command.enable.all.modules}"/>
+        <exec command="${command.enable.all.modules}" checkreturn="true" logoutput="true" />
+
+        <echo message=""/>
         <echo message="Installing Magento..."/>
 
         <exec passthru="false"

@@ -28,18 +28,27 @@
 
     </target>
 
+    <target name="magento:module:init"
+            hidden="true">
+
+        <exec command="${bin.n98-magerun2} module:status | grep -A1 &quot;List of enabled modules:&quot; | tail -n 1"
+              checkreturn="true" outputProperty="first.enabled.module" />
+        <if>
+            <equals arg1="${first.enabled.module}" arg2="None" />
+            <then>
+                <echo message="Enable all Modules"/>
+                <exec command="${bin.n98-magerun2} module:enable --all" checkreturn="true" logoutput="true" />
+            </then>
+        </if>
+    </target>
+
     <target name="magento:install"
             depends="database:drop,
-            database:create"
+            database:create,
+            magento:module:init"
             hidden="true">
 
         <customHook hook="before-magento-install"/>
-
-        <echo message="Enable all Modules"/>
-
-        <property name="command.enable.all.modules" value="${bin.n98-magerun2} module:enable --all" />
-        <echo message="running ${command.enable.all.modules}"/>
-        <exec command="${command.enable.all.modules}" checkreturn="true" logoutput="true" />
 
         <echo message=""/>
         <echo message="Installing Magento..."/>

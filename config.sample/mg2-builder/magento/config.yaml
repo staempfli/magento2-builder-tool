@@ -1,70 +1,60 @@
 LOCAL:
 # Disable merge static files
   dev/js/merge_files:
-    default:
-      0: 0
+    default: 0
   dev/css/merge_css_files:
-    default:
-      0: 0
+    default: 0
 # Disable Varnish
   system/full_page_cache/caching_application:
-    default:
-      0: 1
+    default: 1
 # SSL Configuration
   web/secure/use_in_frontend:
-    default:
-      0: 0
+    default: 0
   web/secure/use_in_adminhtml:
-    default:
-      0: 0
+    default: 0
   web/secure/enable_hsts:
-    default:
-      0: 0
+    default: 0
   web/secure/enable_upgrade_insecure:
-    default:
-      0: 0
+    default: 0
   web/secure/base_link_url:
       default:
         0: "{{secure_base_url}}"
   web/unsecure/base_link_url:
-    default:
-      0: "{{unsecure_base_url}}"
+    default: "{{unsecure_base_url}}"
 # Store urls
   web/unsecure/base_url:
-    default:
-      0: "http://${project.name}.lo/"
+    default: "http://${project.name}.lo/"
+#    websites:
+#      de: "http://${project.name}-de.lo/"
   web/secure/base_url:
-    default:
-      0: "http://${project.name}.lo/"
+    default: "http://${project.name}.lo/"
+#    websites:
+#      de: "http://${project.name}-de.lo/"
 
 IGR:
 # Disable Varnish
   system/full_page_cache/caching_application:
-    default:
-      0: 1
+    default: 1
 # SSL Configuration
   web/secure/use_in_frontend:
-    default:
-      0: 0
+    default: 0
   web/secure/use_in_adminhtml:
-    default:
-      0: 0
+    default: 0
   web/secure/enable_hsts:
-    default:
-      0: 0
+    default: 0
   web/secure/enable_upgrade_insecure:
-    default:
-      0: 0
+    default: 0
   web/secure/base_link_url:
       default:
         0: "{{secure_base_url}}"
   web/unsecure/base_link_url:
-    default:
-      0: "{{unsecure_base_url}}"
+    default: "{{unsecure_base_url}}"
 # Store urls
   web/unsecure/base_url:
-    default:
-      0: "http://<server-domain>/"
+    default: "https://<server-domain>/"
+#    websites:
+#      de: "https://${project.name}-de.lo/"
   web/secure/base_url:
-    default:
-      0: "http://<server-domain>/"
+    default: "https://<server-domain>/"
+#    websites:
+#      de: "https://${project.name}-de.lo/"

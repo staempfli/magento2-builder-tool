@@ -13,6 +13,8 @@ require_once dirname(dirname(__FILE__)) . '/lib/SpycLib.php';
 
 class EnsureConfiguration extends Task
 {
+    private $magentoConfigSetCommandAvailable;
+
     /**
      * Get Config from Yaml and set config for corresponding environment
      */
@@ -31,7 +33,7 @@ class EnsureConfiguration extends Task
         }
 
         $config = $allConfig[$environment];
-        $this->_setConfigValues($config);
+        $this->setConfigValues($config);
     }
 
     /**
@@ -41,27 +43,67 @@ class EnsureConfiguration extends Task
      * @param array $config
      * @throws BuildException
      */
-    private function _setConfigValues(array $config)
+    private function setConfigValues(array $config)
     {
-        $magerunBin = $this->getProject()->getProperty('bin.n98-magerun2');
         foreach ($config as $path => $pathData) {
             foreach ($pathData as $scope => $scopeData) {
-                foreach ($scopeData as $scopeId => $value) {
-                    $value = $this->getProject()->replaceProperties($value);
-                    $command = sprintf('%s config:set --scope="%s" --scope-id="%s" %s %s',
-                        $magerunBin, $scope, $scopeId, $path, $value);
-                    exec($command, $output, $return);
-                    if ($return) {
-                        $message = sprintf('Error executing command: %s', $command);
-                        $this->log($message, Project::MSG_ERR);
-                        throw new BuildException("Error executing command: %s", $command);
-                    }
-                    $message = sprintf('Setting magento config scope="%s" scope-id=%s path=%s value=%s',
-                        $scope, $scopeId, $path, $value);
-                    $this->log($message, Project::MSG_INFO);
+                if ('default' == $scope) {
+                    $this->executeConfigSetCommand($path, $scopeData);
+                    continue;
+                }
+                foreach ($scopeData as $scopeCode => $value) {
+                    $this->executeConfigSetCommand($path, $value, $scope, $scopeCode);
                 }
             }
         }
     }
-    
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function executeConfigSetCommand($path, $value, $scope = false, $scopeCode = false)
+    {
+        $command = $this->getConfigSetCommand($path, $value);
+        if ($scope && $scopeCode) {
+            $command = $command . " " . $this->getConfigSetScopeParams($scope, $scopeCode);
+        }
+        $this->log($command, Project::MSG_INFO);
+        exec($command, $output, $return);
+        if ($return) {
+            $message = sprintf('Error executing command: %s', $command);
+            $this->log($message, Project::MSG_ERR);
+            throw new BuildException($message);
+        }
+    }
+
+    private function getConfigSetCommand($path, $value)
+    {
+        if ($this->isMagentoConfigSetAvailable()) {
+            $magentoBin = $this->getProject()->getProperty('bin.magento');
+            return "{$magentoBin} config:set --lock {$path} {$value}";
+        }
+        $magerunBin = $this->getProject()->getProperty('bin.n98-magerun2');
+        return "{$magerunBin} config:set {$path} {$value}";
+    }
+
+    private function getConfigSetScopeParams($scope, $scopeCode)
+    {
+        if ($this->isMagentoConfigSetAvailable()) {
+            return "--scope={$scope} --scope-code={$scopeCode}";
+        }
+        return "--scope={$scope} --scope-id={$scopeCode}";
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function isMagentoConfigSetAvailable(): bool
+    {
+        if (null == $this->magentoConfigSetCommandAvailable) {
+            $magentoBin = $this->getProject()->getProperty('bin.magento');
+            exec("{$magentoBin} config:set --help", $output, $return);
+            $this->magentoConfigSetCommandAvailable = ($return) ? false : true;
+        }
+        return $this->magentoConfigSetCommandAvailable;
+    }
 }

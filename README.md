@@ -187,9 +187,29 @@ If you install `n98-magerun2` in your server in another way, be sure to configur
 
 ## Troubleshooting
 
+#### Set null config values on magento version 2.2.x
+
+* **Problem**: [PR #15216](https://github.com/magento/magento2/pull/15216)
+* **Solution**: Apply patch directly in your project using composer
+
+```
+"require": {
+	"cweagans/composer-patches": "^1.0"
+},
+"extra": {
+	"patches": {
+		"magento/module-config": {
+			"Make possible to set null values using config:set command": "https://stash.staempfli.com/projects/MAG/repos/magento2-patches/raw/patches/2.2.x/config-set-null-value/version-2.2.0.patch"
+		}
+	},
+	"composer-exit-on-patch-failure": true
+}
+```
+**NOTE**: use `version-2.2.0.patch` for magento `>=2.2.0 <=2.2.3` and `version-2.2.4.patch` for magento  `>=2.2.4`
+
 #### MySQL server has gone away
 
-*  **Problem**: `MySQL` crashes sometime when creating, importing or updating the Magento database.
+* **Problem**: `MySQL` crashes sometime when creating, importing or updating the Magento database.
 
 * **Solution**: Add following configuration in your `.my.cnf`
 	* Gist: [.my.conf](https://gist.github.com/jalogut/f507f13b27f7a63d936edd58fad5e121)

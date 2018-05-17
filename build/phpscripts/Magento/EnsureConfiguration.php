@@ -63,6 +63,7 @@ class EnsureConfiguration extends Task
      */
     private function executeConfigSetCommand($path, $value, $scope = false, $scopeCode = false)
     {
+        $value = $this->getProject()->replaceProperties($value);
         $command = $this->getConfigSetCommand($path, $value);
         if ($scope && $scopeCode) {
             $command = $command . " " . $this->getConfigSetScopeParams($scope, $scopeCode);

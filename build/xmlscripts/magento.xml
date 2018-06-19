@@ -32,12 +32,12 @@
             hidden="true">
 
         <exec command="${bin.n98-magerun2} module:status | grep -A1 &quot;List of enabled modules:&quot; | tail -n 1"
-              checkreturn="true" outputProperty="first.enabled.module" />
+              checkreturn="true" outputProperty="first.enabled.module"/>
         <if>
-            <equals arg1="${first.enabled.module}" arg2="None" />
+            <equals arg1="${first.enabled.module}" arg2="None"/>
             <then>
                 <echo message="Enable all Modules"/>
-                <exec command="${bin.n98-magerun2} module:enable --all" checkreturn="true" logoutput="true" />
+                <exec command="${bin.n98-magerun2} module:enable --all" checkreturn="true" logoutput="true"/>
             </then>
         </if>
     </target>
@@ -53,11 +53,9 @@
         <echo message=""/>
         <echo message="Installing Magento..."/>
 
-        <exec passthru="false"
-              checkreturn="true"
-              logoutput="true"
-              command="${bin.n98-magerun2} setup:install
-                --backend-frontname=&quot;${magento.admin.frontname}&quot;
+        <property name="command.magento.install" value="${bin.n98-magerun2} setup:install" />
+        <property name="params.command.magento.install"
+                  value="--backend-frontname=&quot;${magento.admin.frontname}&quot;
                 --db-host=&quot;${database.host}&quot;
                 --db-name=&quot;${database.name}&quot;
                 --db-user=&quot;${database.user}&quot;
@@ -73,8 +71,21 @@
                 --admin-password=&quot;${install.admin.password}&quot;
                 --use-rewrites=1
                 --cleanup-database
-                ${magento.setup.install.extra.params}
-               "/>
+                ${magento.setup.install.extra.params}"
+        />
+
+        <exec command="${command.magento.install} --help" outputProperty="command.magento.install.help.output" checkreturn="true"/>
+        <if>
+            <contains string="${command.magento.install.help.output}" substring="--no-interaction"/>
+            <then>
+                <property name="params.command.magento.install" value="${params.command.magento.install} --no-interaction" override="true"/>
+            </then>
+        </if>
+
+        <exec command="${command.magento.install} ${params.command.magento.install}"
+              passthru="true"
+              checkreturn="true"
+              logoutput="true" />
 
         <customHook hook="after-magento-install"/>
 
@@ -99,9 +110,9 @@
             </else>
         </if>
 
-        <property name="command.setup.upgrade" value="${bin.n98-magerun2} setup:upgrade ${param.keep.generated}" />
+        <property name="command.setup.upgrade" value="${bin.n98-magerun2} setup:upgrade ${param.keep.generated}"/>
         <echo message="running ${command.setup.upgrade}"/>
-        <exec command="${command.setup.upgrade}" checkreturn="true" logoutput="true" />
+        <exec command="${command.setup.upgrade}" checkreturn="true" logoutput="true"/>
     </target>
 
     <target name="magento:cache:clean"
@@ -109,14 +120,16 @@
 
         <property name="command.cache.clean" value="${bin.n98-magerun2} cache:clean"/>
         <echo message="running ${command.cache.clean}"/>
-        <exec command="${command.cache.clean}" returnProperty="clean.cache.return" outputProperty="command.cache.clean.output"/>
+        <exec command="${command.cache.clean}" returnProperty="clean.cache.return"
+              outputProperty="command.cache.clean.output"/>
 
         <if>
             <not>
                 <equals arg1="${clean.cache.return}" arg2="0"/>
             </not>
             <then>
-                <property name="command.cache.remove" value="rm -rf ${magento.dir}/var/cache/* ${magento.dir}/var/di/* ${magento.dir}/var/generation/* ${magento.dir}/var/page_cache/*"  />
+                <property name="command.cache.remove"
+                          value="rm -rf ${magento.dir}/var/cache/* ${magento.dir}/var/di/* ${magento.dir}/var/generation/* ${magento.dir}/var/page_cache/*"/>
                 <echo message="try removing folder directly"/>
                 <echo message="running ${command.cache.remove}"/>
                 <exec command="${command.cache.remove}" logoutput="true"/>

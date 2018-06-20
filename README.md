@@ -64,7 +64,7 @@ cp -r <vendor_path>/staempfli/magento2-builder-tool/config.sample/ config
 
 * Set the project languages and other configuration into `config/project.properties` or `config/mg2-builder/build.properties`
 * Set the project custom `core_config_data` on `config/mg2-builder/magento/config.yaml`
-* Set the project servers settings on `config.sample/mg2-builder/server/config.yaml`
+* Set the project servers settings on `config/mg2-builder/server/config.yaml`
 
 **NOTE:** You only need to replace parameters between `<>` with your corresponding values. All other placehoders like `${}` or `{{}}` will be automatically replaced during the tool execution
 

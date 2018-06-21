@@ -100,19 +100,26 @@
 
     <target name="magento:setup:upgrade"
             hidden="true">
+        <property name="command.magento.upgrade" value="${bin.n98-magerun2} setup:upgrade" />
+        <property name="params.command.magento.upgrade" value=""/>
+
         <if>
             <equals arg1="${setup.upgrade.keep.generated}" arg2="1"/>
             <then>
-                <property name="param.keep.generated" value="--keep-generated" override="true"/>
+                <property name="params.command.magento.upgrade" value="${params.command.magento.upgrade} --keep-generated" override="true"/>
             </then>
-            <else>
-                <property name="param.keep.generated" value="" override="true"/>
-            </else>
         </if>
 
-        <property name="command.setup.upgrade" value="${bin.n98-magerun2} setup:upgrade ${param.keep.generated}"/>
-        <echo message="running ${command.setup.upgrade}"/>
-        <exec command="${command.setup.upgrade}" checkreturn="true" logoutput="true"/>
+        <exec command="${command.magento.upgrade} --help" outputProperty="command.magento.upgrade.help.output" checkreturn="true"/>
+        <if>
+            <contains string="${command.magento.upgrade.help.output}" substring="--no-interaction"/>
+            <then>
+                <property name="params.command.magento.upgrade" value="${params.command.magento.upgrade} --no-interaction" override="true"/>
+            </then>
+        </if>
+
+        <echo message="${command.magento.upgrade} ${params.command.magento.upgrade}"/>
+        <exec command="${command.magento.upgrade} ${params.command.magento.upgrade}" checkreturn="true" logoutput="true"/>
     </target>
 
     <target name="magento:cache:clean"

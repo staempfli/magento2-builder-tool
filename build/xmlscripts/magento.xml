@@ -85,7 +85,11 @@
         <exec command="${command.magento.install} ${params.command.magento.install}"
               passthru="true"
               checkreturn="true"
-              logoutput="true" />
+              logoutput="true"
+              outputProperty="command.magento.install.output"/>
+        <phingcall target="util:check:output">
+            <property name="check.output" value="${command.magento.install.output}" override="true"/>
+        </phingcall>
 
         <customHook hook="after-magento-install"/>
 
@@ -119,7 +123,13 @@
         </if>
 
         <echo message="${command.magento.upgrade} ${params.command.magento.upgrade}"/>
-        <exec command="${command.magento.upgrade} ${params.command.magento.upgrade}" checkreturn="true" logoutput="true"/>
+        <exec command="${command.magento.upgrade} ${params.command.magento.upgrade}"
+              checkreturn="true"
+              logoutput="true"
+              outputProperty="command.magento.upgrade.output"/>
+        <phingcall target="util:check:output">
+            <property name="check.output" value="${command.magento.upgrade.output}" override="true"/>
+        </phingcall>
     </target>
 
     <target name="magento:cache:clean"

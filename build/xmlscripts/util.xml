@@ -12,13 +12,13 @@
     <target name="util:properties"
             hidden="true">
 
-        <!-- get the project name automatically as the project root directory -->
-        <exec command="basename ${application.startdir}" outputProperty="project.name"/>
-
         <property file="${application.startdir}/../_conf/environment.properties"/>
         <property file="${application.startdir}/config/project.properties"/>
         <property file="${application.startdir}/config/mg2-builder/build.properties"/>
         <property file="${phing.dir}/build/config/default.properties"/>
+
+        <!-- If not set, get the project name automatically as the project root directory -->
+        <exec command="basename ${application.startdir}" outputProperty="project.name"/>
 
         <customHook hook="after-read-properties"/>
     </target>

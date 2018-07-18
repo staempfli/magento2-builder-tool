@@ -17,8 +17,15 @@
         <property file="${application.startdir}/config/mg2-builder/build.properties"/>
         <property file="${phing.dir}/build/config/default.properties"/>
 
-        <!-- If not set, get the project name automatically as the project root directory -->
-        <exec command="basename ${application.startdir}" outputProperty="project.name"/>
+        <if>
+            <not>
+                <isset property="project.name" />
+            </not>
+            <then>
+                <!-- If not set, get the project name automatically as the project root directory -->
+                <exec command="basename ${application.startdir}" outputProperty="project.name"/>
+            </then>
+        </if>
 
         <customHook hook="after-read-properties"/>
     </target>

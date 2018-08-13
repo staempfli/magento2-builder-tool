@@ -100,9 +100,9 @@ class EnsureConfiguration extends Task
      */
     private function isMagentoConfigSetAvailable(): bool
     {
-        if (null == $this->magentoConfigSetCommandAvailable) {
+        if (null === $this->magentoConfigSetCommandAvailable) {
             $magentoBin = $this->getProject()->getProperty('bin.magento');
-            exec("{$magentoBin} config:set --help", $output, $return);
+            exec("{$magentoBin} config:set --help 2> /dev/null", $output, $return);
             $this->magentoConfigSetCommandAvailable = ($return) ? false : true;
         }
         return $this->magentoConfigSetCommandAvailable;

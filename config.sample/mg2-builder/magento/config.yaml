@@ -17,8 +17,7 @@ LOCAL:
   web/secure/enable_upgrade_insecure:
     default: 0
   web/secure/base_link_url:
-      default:
-        0: "{{secure_base_url}}"
+    default: "{{secure_base_url}}"
   web/unsecure/base_link_url:
     default: "{{unsecure_base_url}}"
 # Store urls
@@ -45,8 +44,7 @@ IGR:
   web/secure/enable_upgrade_insecure:
     default: 0
   web/secure/base_link_url:
-      default:
-        0: "{{secure_base_url}}"
+    default: "{{secure_base_url}}"
   web/unsecure/base_link_url:
     default: "{{unsecure_base_url}}"
 # Store urls

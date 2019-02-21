@@ -32,7 +32,7 @@
     <target name="install:allowed"
             hidden="true">
         <if>
-            <equals arg1="${project.environment}" arg2="local"/>
+            <contains string="${project.environment.install.alowed}" substring="${project.environment}"/>
             <then>
                 <echo message="&quot;${project.environment}&quot; is a valid environment for executing this action"/>
             </then>

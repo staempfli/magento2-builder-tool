@@ -39,7 +39,7 @@
                 <echo message="Local environment already set to ${project.environment}"/>
             </then>
             <else>
-                <input propertyName="project.environment" validArgs="local,igr"
+                <input propertyName="project.environment" validArgs="${project.environment.valid}"
                        message="Local Environment: "/>
             </else>
         </if>

@@ -56,7 +56,7 @@
         <property name="command.magento.install" value="${bin.n98-magerun2} setup:install" />
         <property name="params.command.magento.install"
                   value="--backend-frontname=&quot;${magento.admin.frontname}&quot;
-                --db-host=&quot;${database.host}&quot;
+                --db-host=&quot;${database.host}:${database.port}&quot;
                 --db-name=&quot;${database.name}&quot;
                 --db-user=&quot;${database.user}&quot;
                 --db-password=&quot;${database.password}&quot;

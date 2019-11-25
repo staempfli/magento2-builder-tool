@@ -83,6 +83,7 @@
                 <replacetokens begintoken="{{" endtoken="}}">
                     <token key="ENCRYPTION_KEY" value="${encryption.key}"/>
                     <token key="DATABASE_HOST" value="${database.host}"/>
+                    <token key="DATABASE_PORT" value="${database.port}"/>
                     <token key="DATABASE_USER" value="${database.user}"/>
                     <token key="DATABASE_PASS" value="${database.password}"/>
                     <token key="DATABASE_NAME" value="${database.name}"/>

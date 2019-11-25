@@ -42,7 +42,16 @@
             </then>
         </if>
 
-        <property name="database.connection.command" value="mysql -h${database.host} -u${database.admin.username}"/>
+        <if>
+            <not>
+                <isset property="database.user.host"/>
+            </not>
+            <then>
+                <property name="database.user.host" value="${database.host}"/>
+            </then>
+        </if>
+
+        <property name="database.connection.command" value="mysql -h${database.host} -u${database.admin.username} -P${database.port}"/>
         <if>
             <not>
                 <equals arg1="${database.admin.password}" arg2=""/>
@@ -59,9 +68,9 @@
             logskipped="true">
 
         <exec command="${database.connection.command} -e '
-        DROP USER IF EXISTS `${database.user}`@`${database.host}`;
-        CREATE USER IF NOT EXISTS `${database.user}`@`${database.host}` IDENTIFIED BY &quot;${database.password}&quot;;
-        GRANT ALL ON *.* TO `${database.user}`@`${database.host}`;'"
+        DROP USER IF EXISTS `${database.user}`@`${database.user.host}`;
+        CREATE USER IF NOT EXISTS `${database.user}`@`${database.user.host}` IDENTIFIED BY &quot;${database.password}&quot;;
+        GRANT ALL ON *.* TO `${database.user}`@`${database.user.host}`;'"
               checkreturn="true"
               logoutput="true"/>
 

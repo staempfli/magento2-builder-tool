@@ -1,5 +1,5 @@
 # Magento 2 Builder tool
-
+[![Project Status: Abandoned – Initial development has started, but there has not yet been a stable, usable release; the project has been abandoned and the author(s) do not intend on continuing development.](http://www.repostatus.org/badges/latest/abandoned.svg)](http://www.repostatus.org/#abandoned)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fdcbb6b4b542ee992888eda876ad51)](https://www.codacy.com/app/Staempfli/magento2-builder-tool?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=staempfli/magento2-builder-tool&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1574c4018d8d90520572/maintainability)](https://codeclimate.com/github/staempfli/magento2-builder-tool/maintainability)
 
